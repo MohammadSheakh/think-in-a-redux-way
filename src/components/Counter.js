@@ -6,6 +6,9 @@ export default function Counter({ id, count, increment, decrement }) {
         <div class="p-4 h-auto flex flex-col items-center justify-center space-y-5 bg-white rounded shadow">
             <Count count={count} />
             <div class="flex space-x-3">
+                {/* function call kora jabe na .. function er body pathate hobe  
+                    arrow function nilam .. shei function ta ashole function tar call ta return kore .. 
+                */}
                 <Button handler={() => increment(id)}>Increment</Button>
                 <Button handler={() => decrement(id)}>Decrement</Button>
             </div>
