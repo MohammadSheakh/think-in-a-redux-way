@@ -2,6 +2,7 @@ import { useState } from "react";
 import Counter from "./components/Counter";
 import Stats from "./components/Stats";
 
+// amra ekta counter er array nibo ..
 const initialState = [
     {
         id: 1,
