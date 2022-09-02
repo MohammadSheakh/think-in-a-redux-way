@@ -5,7 +5,7 @@ import Stats from "./components/Stats";
 // react e state ta immutable e change korte hoy.. mane amra shorashori ei array ta change korbo na
 // amra ager array tar ekta copy baniye niye .. tar shathe add korbo .. then finally return kore dibo
 
-// amra ekta counter er array nibo ..initial  state e ...
+// state hishebe amra ekta counter er array nibo ..initial  state e ...
 const initialState = [
     {
         id: 1, // prothom counter er id hocche 1 .. count er value 0
@@ -22,7 +22,7 @@ export default function App() {
     // total count nam e ekta function nilam ...
     const totalCount = () => {
         // array er element gula jog korte amra reduce use korte pari
-        // (result, protibar ekta kore element) =>  , initial value );
+        // (result, protibar ekta kore element / current element / total object ta) => return korbe jeta , initial value );
         return state.reduce((total, counter) => total + counter.count, 0); //🎯🔴📢🔥💘
     };
 
@@ -42,7 +42,7 @@ export default function App() {
 
         setState(updatedCounter);
     };
-
+    // muted kora mane change kora ...
     const decrement = (id) => {
         const updatedCounter = state.map((c) => {
             if (c.id === id) {
