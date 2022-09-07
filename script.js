@@ -4,7 +4,7 @@ const incrementEl = document.getElementById("increment");
 const decrementEl = document.getElementById("decrement");
 
 // action identifiers
-const INCREMENT = "increment";
+const INCREMENT = "increment"; // static jinish gula ke capital letter e likhte hoy
 const DECREMENT = "decrement";
 
 // action creators
@@ -59,7 +59,7 @@ store.subscribe(render);
 
 // button click listeners
 incrementEl.addEventListener("click", () => {
-    store.dispatch(increment(3));
+    store.dispatch(increment(3)); // action creator ke pass kortesi
 });
 
 decrementEl.addEventListener("click", () => {
