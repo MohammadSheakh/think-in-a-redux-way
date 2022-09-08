@@ -28,6 +28,7 @@ const initialState = {
 };
 
 // create reducer function
+// pure function hote hobe .. pure function hocche nijer kaj chara .. onno kono kaj kore na
 function counterReducer(state = initialState, action) {
     if (action.type === INCREMENT) {
         return {
