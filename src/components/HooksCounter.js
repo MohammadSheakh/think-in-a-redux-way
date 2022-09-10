@@ -20,6 +20,7 @@ function HooksCounter() {
                 <button
                     className="bg-indigo-400 text-white px-3 py-2 rounded shadow"
                     onClick={incrementHandler}
+                    // parameter jehetu pass kortesi na .. tai anonymous function likhar dorkar nai
                 >
                     Increment
                 </button>
