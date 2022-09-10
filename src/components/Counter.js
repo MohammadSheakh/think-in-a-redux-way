@@ -9,12 +9,14 @@ function Counter({ count, increment, decrement }) {
                 <button
                     className="bg-indigo-400 text-white px-3 py-2 rounded shadow"
                     onClick={increment}
+                    // onClick e function er body dite hoy .. function er call na ....
                 >
                     Increment
                 </button>
                 <button
                     className="bg-red-400 text-white px-3 py-2 rounded shadow"
                     onClick={decrement}
+                    // onClick e function er body dite hoy .. function er call na ....
                 >
                     Decrement
                 </button>
@@ -37,10 +39,35 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
+// dispatch korar je function ta .. shetao to redux er kache ase .. shei dispatch korar function ta keo
+// amra , amader component er props e niye chole ashbo ..
+// dispatch er khetre amader shudhu dispatch ta lagbe ..
 const mapDispatchToProps = (dispatch) => {
+    // amra jei nam e props dite chai .. sheta object akare likhbo
+    // dispatch ke ekta action bole dite hoy ..
     return {
+        // dispatch ta jehetu amra peye jabo .. dispatch ta amader ke call korte hobe .. increment ta hocche
+        // ashole dispatch function .. kintu kotha hocche  direct dispatch amra call kore dite parbo na ..
+        // karon dispatch call kore dile to ekhanei action ta peye jabe .. sheta to hole hobe na ..
+        // amake ekta function dite hobe .. tai amra ekta anonymous function nilam.. jeta return kore
+        // dispatch function .. and dispatch function call korbo jokhon ami .. tokhon amake vitore ki dite hobe
+        // ekta action ..so ami actions gula import kore niye ashbo .. counter er jonno
+        // action hocche simple ekta object .. jetar type {type: } hocche something ..
+        // kintu amra amader khetre action creator use korechi amra .. amra jodi action creator e amra jai
+        // tahole dekhte parbo .. increament function .. she ekta value ney .. ar amader ke ekta object
+        // return kore i mean action diye dey ..tahole action creator theke amra jodi function ta niye ashi
+
         increment: (value) => dispatch(increment(value)),
+        // increament function ta ekhane ami call kore diyechi .. ki return peyechi .. ultimately ekta
+        // action return peyechi.. ekta object peyechi .. jar moddhe object property ase ..
+        // shei increment er moddhe to ekta value lagbe tai na .. tai ami annoynimous function er moddhe
+        // value niye .. sheta ami increment function er moddhe pass kore diyechi
         decrement: (value) => dispatch(decrement(value)),
+
+        // dispatch namok function ta ekhane kintu call hoye jay na .. dispatch function ta ekhane return kore ..
+        // and dispatch function er moddhe amake action ta dite hoy ..
+
+        // ekhon tahole ei duita jinish .. increment and decrement .. amader props e available hoye jabe ..
     };
 };
 
