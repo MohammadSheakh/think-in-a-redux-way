@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { decrement, increment } from "../redux/counter/actions";
 
+// amar to action dispatch kora niyei kotha ... tai action gula ke niye ashlam ...
+// default export hishebe na thakle .. { } er moddhe nite hobe ..
+
 function HooksCounter() {
     const count = useSelector((state) => state.value);
     const dispatch = useDispatch();
 
     const incrementHandler = (value) => {
-        dispatch(increment(value));
+        dispatch(increment(value)); // increment () ke call kore dile action object ta pai ..
     };
 
     const decrementHandler = (value) => {
@@ -20,6 +23,7 @@ function HooksCounter() {
                 <button
                     className="bg-indigo-400 text-white px-3 py-2 rounded shadow"
                     onClick={() => incrementHandler(5)}
+                    // jokhon e click korbe .. tokhon e ei function ta call hobe
                 >
                     Increment
                 </button>
