@@ -1,3 +1,5 @@
+//2.4
+import { findAllInRenderedTree } from "react-dom/test-utils";
 import { connect } from "react-redux";
 import { decrement, increment } from "../redux/counter/actions";
 

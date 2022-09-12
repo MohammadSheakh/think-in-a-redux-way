@@ -17,6 +17,7 @@ export default function App() {
                     <DynamicHooksCounter />
                     <VariableCounter />
                     <VariableCounter dynamic />
+                    {/* <VariableCounter dynamic={true} /> ek e kotha  */}
                 </div>
             </div>
         </Provider>

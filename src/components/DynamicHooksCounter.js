@@ -1,3 +1,4 @@
+//2.7
 import { useDispatch, useSelector } from "react-redux";
 import { decrement, increment } from "../redux/dynamicCounter/actions";
 

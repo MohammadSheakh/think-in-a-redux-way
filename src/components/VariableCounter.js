@@ -1,9 +1,11 @@
+// 2.8
 import { connect } from "react-redux";
 import { decrement, increment } from "../redux/counter/actions";
 import {
     decrement as dynamicDecrement,
     increment as dynamicIncrement,
-} from "../redux/dynamicCounter/actions";
+} from "../redux/dynamicCounter/actions"; // rename
+// dui jayga thekei amader action gula ke niye ashte hobe
 
 function VariableCounter({ count, increment, decrement }) {
     return (
@@ -27,7 +29,11 @@ function VariableCounter({ count, increment, decrement }) {
     );
 }
 
+// ekhane amader main change ta hobe // state ta jehetu dui vag e vag hoye gese .. tai
+// state.value er moddhe kintu amra ar jinish ta pabo na ..
 const mapStateToProps = (state, ownProps) => {
+    // ownProps e dynamic er value jodi true thake .. taile ekta return korbo naile
+    // arekta return korbo .. object return korte hoy arki
     return {
         count: ownProps.dynamic
             ? state.dynamicCounter.value
