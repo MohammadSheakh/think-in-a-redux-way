@@ -1,13 +1,15 @@
 import { useDispatch } from "react-redux";
 import cancelImage from "../assets/images/cancel.png";
 import { colorSelected, deleted, toggled } from "../redux/todos/actions";
+// action gulao niye ashte hobe .. karon shegula ekhan theke dispatch korte hobe
 
 export default function Todo({ todo }) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); // dispatch lagbe .. tai useDispatch hook
 
     const { text, id, completed, color } = todo;
 
     const handleStatusChange = (todoId) => {
+        // amar ekhane ekta action dispatch kora dorkar
         dispatch(toggled(todoId));
     };
 
@@ -30,7 +32,8 @@ export default function Todo({ todo }) {
                 <input
                     type="checkbox"
                     checked={completed}
-                    onChange={() => handleStatusChange(id)}
+                    onChange={() => handleStatusChange(id)} // function syntax nite hobe
+                    // jeno id pathate pari
                     className="opacity-0 absolute rounded-full"
                 />
                 {completed && (
@@ -50,6 +53,7 @@ export default function Todo({ todo }) {
                     color === "green" && "bg-green-500"
                 }`}
                 onClick={() => handleColorChange(id, "green")}
+                // color selection er time eo amake action dispatch korte hobe
             ></div>
 
             <div
