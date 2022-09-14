@@ -7,6 +7,8 @@ import store from "./redux/store";
 
 function App() {
     return (
+        // full application e amader je root component ase app.. shetar moddhe amra ashole
+        // Provide kore dibo
         <Provider store={store}>
             <div className="grid place-items-center bg-blue-100 h-screen px-6 font-sans">
                 <Navbar />

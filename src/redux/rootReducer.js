@@ -3,8 +3,8 @@ import filterReducer from "./filters/reducer";
 import todoReducer from "./todos/reducer";
 
 const rootReducer = combineReducers({
-    todos: todoReducer,
-    filters: filterReducer,
+    todos: todoReducer, // state.todos dile jinish ta access korte parbo amra
+    filters: filterReducer, // state.filters dile jinish ta access korte parbo amra
 });
 
 export default rootReducer;
