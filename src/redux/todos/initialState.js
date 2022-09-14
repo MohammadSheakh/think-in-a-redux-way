@@ -11,3 +11,4 @@ export const initialState = [
         color: "red",
     },
 ];
+// initialState ta hobe array of object ... protita object hobe ek ek ta todo
