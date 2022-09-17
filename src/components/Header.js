@@ -14,13 +14,13 @@ export default function Header() {
     };
 
     const submitHandler = (e) => {
-        e.preventDefault();
-        dispatch(added(input));
-        setInput("");
+        e.preventDefault(); // submit korle jeno page ta reload na ney .. shetar bebostha korlam
+        dispatch(added(input)); // action creator ta ke import kore niye ashsi ei khane
+        setInput(""); // sumit hoye jaowar pore jeno input box ta blank hoye jay
     };
 
     const completeHadler = () => {
-        dispatch(allCompleted());
+        dispatch(allCompleted()); // action dispatch kore dilam
     };
 
     const clearHeandler = () => {
