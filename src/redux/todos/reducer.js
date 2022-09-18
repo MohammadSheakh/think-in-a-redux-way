@@ -18,6 +18,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case LOADED:
             return action.payload;
+        // todos jeta server theke pacchi ... eta hocche ekta arrays of object
 
         case ADDED:
             return [
