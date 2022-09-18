@@ -1,3 +1,4 @@
+// program ta node index diye run korte hobe ... 
 const { createStore, applyMiddleware } = require("redux");
 const {
     delayActionMiddleware,
@@ -61,7 +62,10 @@ const store = createStore(
 
 // subscribe to state changes // reactive environment na thakle subscribe ta manually korte hobe
 store.subscribe(() => {
-    console.log(store.getState());
+    // ekta call back function dite hoy ... 
+    console.log(store.getState()); // jokhon e kono state cange hobe .. tokhon e updated state 
+    // ta console e dekhte parbo 
+    
 });
 
 // disptach actions
