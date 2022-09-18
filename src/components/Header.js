@@ -17,6 +17,11 @@ export default function Header() {
     const submitHandler = (e) => {
         e.preventDefault();
         dispatch(addTodo(input));
+        //dispatch(added(input)); // age dispatch kore chilam added nam er ekta action
+        // kintu ekhon ar amra added action creator korbo na .. karon ekhon amader jinish ta
+        // thunk hoye gese ... ekhon added kintu thunk call kore dicche ... thunk function
+        // ekhon added ta call korse .. tahole amra ekhane thunk ke call kore dibo ..
+        // thats it ..
         setInput("");
     };
 

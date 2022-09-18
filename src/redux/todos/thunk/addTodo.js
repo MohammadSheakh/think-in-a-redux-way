@@ -42,3 +42,7 @@ export default addTodo;
  * thunk function ta .. eita korar karone jei shubidha holo .. sheta hocche .. ei khane
  * ami ekhon parameter receive korte parbo ..
  */
+
+// thunk function er bepar ta hoye gelo .. ei ta automatically handle hobe ..
+// kintu kotha hocche eta call er bepar ta ..
+// Component e jai .. kothay call hoyechilo .. amader header er moddhe ..
