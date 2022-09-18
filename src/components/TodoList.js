@@ -8,9 +8,21 @@ export default function TodoList() {
     const filters = useSelector((state) => state.filters);
     const dispatch = useDispatch();
 
+    // useEffect e ekta callback function dite hoy ... 
+    // ekta dependency dite hoy ... and ei jayga ta te 
+    // ekhon amar dispatch korar proyojon hobe ... 
+    // karon thunk function ta to amake dispatch korte hobe 
+    // useDispatch hook niye ashlam.. 
     useEffect(() => {
         dispatch(fetchTodos);
-    }, [dispatch]);
+        /**
+         * age amra action dispatch kortam .. ekhon amra 
+         * thunk function dispatch korte pari ... 
+         * 
+         * tar mane jokhon e component ta load hobe .. 
+         * tokhon e onLoad e ... fetchTodos ta dispatch hobe 
+         */
+    }, [dispatch]); // dependency te ki , keno dite hoy .. sheta vule gesi... 
 
     const filterByStatus = (todo) => {
         const { status } = filters;

@@ -8,9 +8,10 @@ import {
     TOGGLED,
 } from "./actionTypes";
 
+// API theke todos load korar jonno .. Action Creator .. 
 export const loaded = (todos) => {
     return {
-        type: LOADED,
+        type: LOADED, // action return kortese ... 
         payload: todos,
     };
 };
