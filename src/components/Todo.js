@@ -10,7 +10,11 @@ export default function Todo({ todo }) {
     const { text, id, completed, color } = todo;
 
     const handleStatusChange = (todoId) => {
-        dispatch(updateStatus(todoId, completed));
+        // dispatch(toggled(todoId)); // amra dispatch korsilam .. actual toggle action ta
+        dispatch(updateStatus(todoId, completed)); // ekhon amra toggle ke na kore
+        // thunk function ke call korbo ...and thunk function ta toggle ke automatically
+        // shekhan e call kore diyechei ..
+        // current status tao patha te hobe ..
     };
 
     const handleColorChange = (todoId, color) => {
