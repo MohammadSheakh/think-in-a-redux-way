@@ -1,6 +1,7 @@
 import { toggled } from "../actions";
 
 const updateStatus = (todoId, currentStatus) => {
+    // dispatch and getState vore dey ..
     return async (dispatch) => {
         const response = await fetch(`http://localhost:9000/todos/${todoId}`, {
             method: "PATCH",
