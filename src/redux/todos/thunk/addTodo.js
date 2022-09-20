@@ -1,6 +1,6 @@
 import { added } from "../actions";
 
-// thunk function ..
+// thunk function .. ekta anonymous function theke return kore dilam
 const addTodo = (todoText) => {
     return async (dispatch) => {
         // thunk function shob shomoy dispatch receive kore and getState receive kore ..
