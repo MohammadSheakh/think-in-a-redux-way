@@ -18,7 +18,9 @@ export default function Todo({ todo }) {
     };
 
     const handleColorChange = (todoId, color) => {
-        dispatch(updateColor(todoId, color));
+        // dispatch(colorSelected(todoId, color)); // ekhon colorSelected ke call na kore
+        dispatch(updateColor(todoId, color)); // amra updateColor ke call korbo karon
+        // updateColor kintu thunk function .. she e colorSelected ke call kore dicche
     };
 
     const handleDelete = (todoId) => {

@@ -30,6 +30,7 @@ export const toggled = (todoId) => {
 };
 
 export const colorSelected = (todoId, color) => {
+    // kon todo , kon color sheta lagbe ..
     return {
         type: COLORSELECTED,
         payload: {
