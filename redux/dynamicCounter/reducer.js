@@ -26,6 +26,16 @@ const dynamicCounterReducer = (state = initialState, action) => {
                 ...state,
                 count: state.count + 1,
             };
+        /**
+         * extra reducer bujhte hole .. emon vabe bujhte hobe ..,dhoren apnar jokhon
+         * counter er action gula dispatch hobe .. emon jodi korte chan .. jokhon  apni
+         * counter er value 1 baraben .. tokhon jeno dynamic counter er value o 1 bere
+         * jay..
+         *
+         * kono ekta action dispatch hole .. sheta shob reducer er kasei jay ...
+         * tai je khane kaj korte chacchi .. shekhan e shei action er jonno
+         * kaj ta likhe dilei hobe
+         */
 
         default:
             return state;
