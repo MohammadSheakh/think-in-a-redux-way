@@ -1,6 +1,8 @@
-const fetch = require("node-fetch");
+const fetch = require("node-fetch"); // npm i node-fetch@2
 const { createStore, applyMiddleware } = require("redux");
-const thunkMiddleware = require("redux-thunk");
+const thunkMiddleware = require("redux-thunk"); // npm i redux-thunk
+
+// old way of redux .. fetching data
 
 // initial state
 const initialState = {
@@ -8,7 +10,7 @@ const initialState = {
     posts: [],
     error: "",
 };
-
+// amader kichu action likhte hobe .. action creator likhe felchi ..
 const fetchPostsRequested = () => {
     return {
         type: "posts/requested",
@@ -63,27 +65,34 @@ const reducer = (state = initialState, action) => {
 // thunk function
 const fetchPosts = () => {
     return async (dispatch) => {
-        dispatch(fetchPostsRequested());
+        // getState dorkar hoile .. shetao amra nibo
+        dispatch(fetchPostsRequested()); // loading ta true korar jonno ekta action
+        // dispatch kore nite hobe ..
+        // jehetu asynchronous request pathabo ..
 
         try {
+            // jehetu async await .. tai amake try catch block use korte hobe
             const response = await fetch(
                 "https://jsonplaceholder.typicodes.com/posts?_limit=5"
             );
-            const posts = await response.json();
-            dispatch(fetchPostsSucceeded(posts));
+            const posts = await response.json(); // string ke json e convert korlam
+            dispatch(fetchPostsSucceeded(posts)); // Succeeded action ta dispatch
+            // korbo
         } catch (err) {
-            dispatch(fetchPostsFailed(err));
+            dispatch(fetchPostsFailed(err)); // failed action ta dispatch korbo
         }
     };
 };
 
 // create store
 const store = createStore(reducer, applyMiddleware(thunkMiddleware.default));
+// jehetu node.js environment .. tai dot default bole deowa lagse
 
 // subscribe to state changes
 store.subscribe(() => {
+    // jeno ami state change gula dekhte pari
     console.log(store.getState());
 });
 
 // dispatch action
-store.dispatch(fetchPosts());
+store.dispatch(fetchPosts()); // ekhane amra thunk function ta bole dibo ..
