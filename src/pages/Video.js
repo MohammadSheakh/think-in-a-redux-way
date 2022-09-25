@@ -1,3 +1,8 @@
+// video description page 
+/**
+ * ekhon amra request er kaj korbo .. request ta amra kothay korbo ?
+ * amader jei page ta ase .. shei video page e request korbo .. 
+ */
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -12,16 +17,25 @@ export default function Video() {
         (state) => state.video
     );
     const dispatch = useDispatch();
-    const { videoId } = useParams();
+    const { videoId } = useParams(); // amra useParams use kore id ta pai 
+    // url er id .. pete chaile .. .. joto parameter e ase .. 
+    // shob gula ke amra ekta object akare pai ..
+    // app.js er moddhe amra ei paramter er ekta nam nijerai diyechilam .. 
+    //  videoId nam e .. ei nam ei she object er moddhe dibe ... 
 
     useEffect(() => {
-        dispatch(fetchVideo(videoId));
-    }, [dispatch, videoId]);
+        dispatch(fetchVideo(videoId)); // async thunk function dispatch korbo 
+    }, [dispatch, videoId]); // jeta parameter hishebe pathai .. shetao dependency .. 
+    /**
+     * request pathay fellei .. toolkit ki korbe .. action dispatch kore state update
+     * kore felbe .. sei state theke amar kaj hocche single video ta niye asha .. 
+     */
 
-    const { id, link, title, tags } = video || {};
+    const { id, link, title, tags } = video || {}; // destructuring e jeno error na hoy .. 
+    // safe side e thakar jonno 
 
     // decide what to render
-    let content = null;
+    let content = null; // first e null dia initialize korlam 
     if (isLoading) content = <Loading />;
 
     if (!isLoading && isError)
@@ -37,10 +51,13 @@ export default function Video() {
                 <div class="col-span-full w-full space-y-8 lg:col-span-2">
                     <VideoPlayer link={link} title={title} />
 
-                    <VideoDescription video={video} />
+                    <VideoDescription video={video} /> 
+                    {/* tar onek kichu proyojon .. tai full object tai ta ke pathiye dicchi  */}
                 </div>
 
                 <RelatedVideoList currentVideoId={id} tags={tags} />
+                {/* current video id ta pathate hobe .. jeno .. ei video chara 
+                onno video gula ashe ..  current videos er tags gula send kore dilam */}
             </div>
         );
     }
