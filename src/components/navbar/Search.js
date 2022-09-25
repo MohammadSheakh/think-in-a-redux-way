@@ -8,7 +8,8 @@ export default function Search() {
     const { search } = useSelector((state) => state.filter);
     const [input, setInput] = useState(search);
 
-    const match = useMatch("/");
+    const match = useMatch("/"); // homepage e thakle ekta object
+    // return korbe .. naile null return korbe .. 
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
