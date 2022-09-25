@@ -94,6 +94,7 @@ export default function Form() {
                 <div className="form-group">
                     <label>Name</label>
                     <input
+                    // name ar value er value same dite hobe 
                         type="text"
                         name="name"
                         required
@@ -110,9 +111,10 @@ export default function Form() {
                             required
                             type="radio"
                             value="income"
-                            name="type"
-                            checked={type === "income"}
-                            onChange={(e) => setType("income")}
+                            name="type" // state.type  // duita radio element er e same name dite hoy 
+                            checked={type === "income"} // jei jinish ta selected hoye ase shei jinish ta 
+                            // check true hobe jodi ei khetre amar type income  hoy
+                            onChange={(e) => setType("income")} // check hole income hobe ... 
                         />
                         <label>Income</label>
                     </div>
@@ -120,9 +122,10 @@ export default function Form() {
                         <input
                             type="radio"
                             value="expense"
-                            name="type"
+                            name="type" // state.type 
                             placeholder="Expense"
-                            checked={type === "expense"}
+                            // check true hobe jodi ei khetre amar type expense hoy
+                            checked={type === "expense"}// jei jinish ta selected hoye ase shei jinish ta 
                             onChange={(e) => setType("expense")}
                         />
                         <label>Expense</label>
@@ -133,7 +136,7 @@ export default function Form() {
                     <label>Amount</label>
                     <input
                         type="number"
-                        required
+                        required // basic higine ... 
                         placeholder="enter amount"
                         name="amount"
                         value={amount}
@@ -142,11 +145,12 @@ export default function Form() {
                 </div>
 
                 {/* edit mode on thakle Update Transaction er jonno button dekhte parbo  */}
+                {/* loading obosthay button e press kora jabe na  */}
                 <button disabled={isLoading} className="btn" type="submit">
                     {editMode ? "Update Transaction" : "Add Transaction"}
                 </button>
 
-                {!isLoading && isError && (
+                {!isLoading && isError && ( // error thakle error show korbo ... 
                     <p className="error">There was an error occured</p>
                 )}
             </form>
