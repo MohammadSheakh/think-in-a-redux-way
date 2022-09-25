@@ -1,7 +1,10 @@
-import { getTags } from "./tagsAPI";
+import { getTags } from "./tagsAPI"; // getTags nam er ekta async thunk niye ashlam 
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
-
+/**
+ * development mood e react e ... prottek jinish e duibar kore call hoy 
+ */
+// tags namok alada node e thakbe .. 
 const initialState = {
     tags: [],
     isLoading: false,
@@ -11,6 +14,10 @@ const initialState = {
 
 // async thunk
 export const fetchTags = createAsyncThunk("tags/fetchTags", async () => {
+    // convention hocche folder er nam jeita .. shetai deowa uchit 
+    // "tags/fetchTags" ekhane 
+    // er pore . pending / fulfilled / rejected boshiye she nije action baniye nibe ..
+    // sheta dispatch korbe .. 
     const tags = await getTags();
     return tags;
 });
