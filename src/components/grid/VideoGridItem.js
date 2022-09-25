@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 
 export default function VideoGridItem({ video = {} }) {
+    // for safety amra video er ekta default value diye rakhi ..
+    // jodi fallback hoy .. tokhon object destructure korte giye 
+    // fail hoye error dibe .. 
     const { id, thumbnail, title, duration, author, avatar, views, date } =
         video;
 
@@ -12,7 +15,7 @@ export default function VideoGridItem({ video = {} }) {
                         <img
                             src={thumbnail}
                             className="w-full h-auto"
-                            alt={title}
+                            alt={title} 
                         />
                     </Link>
 
