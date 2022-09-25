@@ -75,7 +75,7 @@ export default function Form() {
             })
         );
         setEditMode(false); // edit kora hoye gele .. setEditMode() false kore dite hobe .. 
-        reset(); // form o reset kore dite hobe .. 
+        reset(); // form o reset kore dite hobe ..  .
     };
 
     // edit mode cancel korte chaile 
