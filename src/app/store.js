@@ -4,5 +4,6 @@ import transactionReducer from "../features/transaction/transactionSlice";
 export const store = configureStore({
     reducer: {
         transaction: transactionReducer,
+        // reducer ke niye eshe transaction node create korlam 
     },
 });
