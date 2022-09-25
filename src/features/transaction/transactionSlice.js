@@ -162,7 +162,8 @@ const transactionSlice = createSlice({
                 state.isLoading = false;
                 // delete er khetre amader ke filter method use korte hoy ..
                 state.transactions = state.transactions.filter(
-                    (t) => t.id !== action.meta.arg
+                    // (t) => t.id !== action.payload // amar expectation chilo.. action.payload er moddhe id ta pabo .. jeta back end theke ashbe
+                    (t) => t.id !== action.meta.arg // ami jei argument ta ta ke diyechilam .. shetai she meta er moddhe rekhe diyeche
                     // jei jei jinish gula milbe na .. shegula ke rakhbo ..
                 );
                 // muted kore felechi .. so, amar delete hoye jaowar kotha ..
