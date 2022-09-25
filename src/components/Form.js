@@ -6,10 +6,13 @@ import {
 } from "../features/transaction/transactionSlice";
 
 export default function Form() {
+    // form er data amake locally handle korte hobe .. state manage korte hobe .. 
+    // useState use korbo amra ejonno .. 
     const [name, setName] = useState("");
     const [type, setType] = useState("");
     const [amount, setAmount] = useState("");
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(false); // edit korbo ki korbo na ... 
+    // eta select korar jonno amra ekta state nicchi ... 
 
     const dispatch = useDispatch();
     const { isLoading, isError } = useSelector((state) => state.transaction);
@@ -19,6 +22,7 @@ export default function Form() {
     useEffect(() => {
         const { id, name, amount, type } = editing || {};
         if (id) {
+            // id thakle amra edit mode true korbo .. otherwise false korbo .. 
             setEditMode(true);
             setName(name);
             setType(type);
@@ -29,6 +33,7 @@ export default function Form() {
         }
     }, [editing]);
 
+    // reset mane form er value "" hoye jaowa ... 
     const reset = () => {
         setName("");
         setType("");
@@ -36,7 +41,11 @@ export default function Form() {
     };
 
     const handleCreate = (e) => {
-        e.preventDefault();
+        // form submit korle .. ei function kaj korbe .. 
+        e.preventDefault();// page jeno reload na ney .. ejonno ei ta .. 
+        // amader ke ekta thunk function dispatch korte hoy ... er moddhe ekta object 
+        // pass kora jay .. jetar modde ami name, type, amount bole dite pari .. 
+        // amount ta Number() er moddhe pass korte hobe .. jeno calculation kora jay 
         dispatch(
             createTransaction({
                 name,
@@ -44,13 +53,19 @@ export default function Form() {
                 amount: Number(amount),
             })
         );
-        reset();
+        reset(); // form er data gula reset kore dite hobe .. 
     };
 
     const handleUpdate = (e) => {
-        e.preventDefault();
+        //update button e click korle ekta event fire hoy ... 
+        e.preventDefault(); // jeno page reload na ney 
+        // amra ekta thunk function dispatch kori .. 
         dispatch(
+            // jehtu update er bepar ... tai amader ekta id lagbe .. kon transaction 
+            // update korbo sheta track rakhar jonno .. 
             changeTransaction({
+                // ekhaneo amader ke ekta object bole dite hoy ... er moddhe amra 
+                // value pass korbo .. 
                 id: editing?.id,
                 data: {
                     name: name,
@@ -59,10 +74,11 @@ export default function Form() {
                 },
             })
         );
-        setEditMode(false);
-        reset();
+        setEditMode(false); // edit kora hoye gele .. setEditMode() false kore dite hobe .. 
+        reset(); // form o reset kore dite hobe .. 
     };
 
+    // edit mode cancel korte chaile 
     const cancelEditMode = () => {
         reset();
         setEditMode(false);
@@ -72,6 +88,7 @@ export default function Form() {
         <div className="form">
             <h3>Add new transaction</h3>
 
+            {/* edit mode er upor base kore kon function kaj korabo .. sheta depend korbe .  */}
             <form onSubmit={editMode ? handleUpdate : handleCreate}>
                 <div className="form-group">
                     <label>Name</label>
