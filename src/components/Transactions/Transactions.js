@@ -16,6 +16,7 @@ export default function Transactions() {
 
     // decide what to render
     let content = null;
+    // ki ki case hoite pare .. shegula handle korbo 
     if (isLoading) content = <p>Loading...</p>;
 
     if (!isLoading && isError)
