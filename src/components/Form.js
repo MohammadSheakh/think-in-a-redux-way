@@ -89,6 +89,7 @@ export default function Form() {
             <h3>Add new transaction</h3>
 
             {/* edit mode er upor base kore kon function kaj korabo .. sheta depend korbe .  */}
+            {/* edit mode on thakle .. update korar function ta kaj korbe ..  */}
             <form onSubmit={editMode ? handleUpdate : handleCreate}>
                 <div className="form-group">
                     <label>Name</label>
@@ -140,6 +141,7 @@ export default function Form() {
                     />
                 </div>
 
+                {/* edit mode on thakle Update Transaction er jonno button dekhte parbo  */}
                 <button disabled={isLoading} className="btn" type="submit">
                     {editMode ? "Update Transaction" : "Add Transaction"}
                 </button>
@@ -149,6 +151,7 @@ export default function Form() {
                 )}
             </form>
 
+            {/* edit mode on thaklei .. edit mode cancel korar jonno button dekhte parbo  */}
             {editMode && (
                 <button className="btn cancel_edit" onClick={cancelEditMode}>
                     Cancel Edit
