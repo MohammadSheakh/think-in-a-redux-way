@@ -10,5 +10,6 @@ export const store = configureStore({
         tags: tagsReducer,
         video: videoReducer,
         relatedVideos: relatedVideosReducer,
+        // relatedVideos hocche slice er nam 
     },
 });

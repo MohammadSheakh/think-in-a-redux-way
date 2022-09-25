@@ -10,7 +10,8 @@ export const getRelatedVideos = async ({ tags, id }) => {
             ? tags.map((tag) => `tags_like=${tag}`).join("&") +
               `&id_ne=${id}&_limit=${limit}`
             : `id_ne=${id}&_limit=${limit}`;
-
+    // map korle amra array pai .. shegula ke abar join kore nilam .. 
+    // ne = not equal 
     const response = await axios.get(`/videos?${queryString}`);
 
     return response.data;

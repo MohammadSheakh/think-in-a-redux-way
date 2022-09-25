@@ -3,13 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../components/ui/Loading";
 import { fetchRelatedVideos } from "../../features/relatedVideos/relatedVideosSlice";
 import RelatedVideoListItem from "./RelatedVideoListItem";
-
+// single video page theke ashse .. 
 export default function RelatedVideoList({ currentVideoId, tags }) {
     const dispatch = useDispatch();
+    // useEffect kaj korar pore .. ekhon ami useSelector diye dorte parbo 
     const { relatedVideos, isLoading, isError, error } = useSelector(
         (state) => state.relatedVideos
     );
 
+    // ekhane request pathate hobe .. tarpor map korte hobe 
     useEffect(() => {
         dispatch(fetchRelatedVideos({ tags, id: currentVideoId }));
     }, [dispatch, tags, currentVideoId]);

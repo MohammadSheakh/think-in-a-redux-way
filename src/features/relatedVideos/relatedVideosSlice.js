@@ -6,7 +6,7 @@ const initialState = {
     relatedVideos: [],
     isLoading: false,
     isError: false,
-    error: "",
+    error: "", 
 };
 
 // async thunk
