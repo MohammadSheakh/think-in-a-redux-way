@@ -1,5 +1,5 @@
 [![Youtube][youtube-shield]][youtube-url]
-[![Facebook][facebook-shield]][facebook-group-url]
+[![Facebook][facebook-shield]][facebook-group-url].
 
 <!-- PROJECT LOGO -->
 <br />
@@ -27,17 +27,17 @@ Please follow the below instructions to run different branches of this repositor
 1. Login to the GitHub account on which you have been granted access to this repository. If you have purchased the course but didn't get the access to this repository, please contact our support team. You will find contact details below.
 
 2. Clone this repository -
-   ```sh
-   git clone https://github.com/Learn-with-Sumit/think-in-a-redux-way.git
-   ```
+    ```sh
+    git clone https://github.com/Learn-with-Sumit/think-in-a-redux-way.git
+    ```
 3. Go to the cloned project directory
-   ```sh
-   cd think-in-a-redux-way
-   ```
+    ```sh
+    cd think-in-a-redux-way
+    ```
 4. Checkout/switch to your desired branch. For example to switch to branch 1.1 -
-   ```sh
-   git checkout 1.1
-   ```
+    ```sh
+    git checkout 1.1
+    ```
 5. Follow the corresponding branch's README file instruction to run code.
 
 <!-- CONTACT  -->
