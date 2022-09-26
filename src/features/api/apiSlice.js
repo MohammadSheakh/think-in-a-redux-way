@@ -51,9 +51,29 @@ export const apiSlice = createApi({
      * maddhomeo hote pare ... shei kaj ta koram ...  shei gula ekhon amra ei khane korbo .. 
      * like getVideos, addVideos, UpdateVideos, DeleteVideos .. ei gula .. 
      * ...................... eita abar builder pattern ta follow kore ...eta ultimately ekta callback
-     * function .. erokom dey .. ekhane builder pattern follow korte hobe ... builder ta ultim
+     * function .. erokom dey .. oi jinish gulai apni ekhane list kore diben ... ekhane builder pattern
+     * follow korte hobe ... builder ta ultimately ekta object return korbe arki .. 
      */
     endpoints: (builder) => ({
+        // ei jaygay amra amader sob end point gula likhbo .. 
+        // ebar ami store er reducer e kaj korbo .. 
+        // ami shudhu end points likhesi .. proyojonio reducer tara baniye niyeche .. 
+        /** 
+         * loading state, success state handle korar jonno amra reducer likhtam na .. shei gula kichui
+         * amader likhte hobe na ... 
+         * ei object ta ke ami createApi er vitor diye niye gesi .. jeno ami reducer peye jai ... 
+         * proyojonio middleware peye jai .. egula amake manually likhte hobe na .. 
+         * loading state .. hen ten .. shob e amra beautifully handle korte parbo .. kivabe .. 
+         * createApi diye banale reducer she automatically she create kore niyeche ... 
+         * store er moddhe amar middleware lagbe .. karon cashing , re validation eto kichu to kono
+         * karon chara to korbe na ..tai kichu middleware amader lagbe .. jetao amader temon likhte 
+         * hobe na... 
+         *  
+        */
+       /**
+        * er por amra end point likhbo .. amader bivinno api .. end point e connect korbo .. 
+        * tar por hook diye she jinish gula ke access korbo .. 
+        */
         getVideos: builder.query({
             query: () => "/videos",
             keepUnusedDataFor: 600,
