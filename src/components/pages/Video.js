@@ -9,8 +9,10 @@ import Player from "../video/Player";
 import RelatedVideos from "../video/related/RelatedVideos";
 
 export default function Video() {
+    // link theke video er id niye .. data base theke video load kore dekhabo .. 
     const { videoId } = useParams();
-    const { data: video, isLoading, isError } = useGetVideoQuery(videoId);
+    const { data: video, isLoading, isError } = useGetVideoQuery(videoId); // hook er moddhe pass kore
+    // dilam .. shekhan theke data pai .. data ke alias kore new nam dilam .. sheta hocche video .. 
 
     let content = null;
     if (isLoading) {

@@ -89,7 +89,9 @@ export const apiSlice = createApi({
             // query te URL er porer ongsho tuku amra bolte parbo ..
             // ekta function .. jeta return kore ekta string ..
             // amra ekta API Route banalam.. route ta bananor jonno tar diye deowa builder.query() function ta use korchi
-            keepUnusedDataFor: 600,
+            keepUnusedDataFor: 600, // by default eta 60 thake .. mane 1 minute .. 
+            // ami 5 dile .. eta 5 second porei data re-fetch korbe ..  same page e thakle ...
+            // un used er calculation shuru hobe na .. onno page e gele .. count down shuru hobe .. 
             providesTags: ["Videos"],
         }),
         /**
@@ -103,16 +105,31 @@ export const apiSlice = createApi({
             providesTags: (result, error, arg) => [{ type: "Video", id: arg }],
         }),
         getRelatedVideos: builder.query({
+            // ?title_like=boom&title_like=nice&_limit=4
             query: ({ id, title }) => {
-                const tags = title.split(" ");
-                const likes = tags.map((tag) => `title_like=${tag}`);
-                const queryString = `/videos?${likes.join("&")}&_limit=4`;
+                // eta ekta function .. ekta URL er path return kore dite hobe .. 
+                const tags = title.split(" "); // title hocche ekta sentence .. eta ke split kore 
+                // word e vag kore nite hobe .. tags er ekta array create hoye gese .. 
+                const likes = tags.map((tag) => `title_like=${tag}`); // ekta array ke arekta array 
+                // te convert korte pari .. map use kore .. 
+                const queryString = `/videos?${likes.join("&")}&_limit=4`; // array ke to string e
+                // convert korte hobe ... array.join() method call kore string banate pari 
                 return queryString;
             },
             providesTags: (result, error, arg) => [
                 { type: "RelatedVideos", id: arg.id },
             ],
         }),
+        /**
+         * amra ekhon porjonto bivinno dhoroner get request korechi .. and shegula shob automatic
+         * hoyeche . but onek khetrei erokom automatic vabe amader kaj hoy na .. manual kichu kaj
+         * kora lage .. configuration kora lage .. customization kora lage ..so, sheta korte gelei
+         * amra RTK QUERY er kichu advance feature shomporke janbo ..
+         * 
+         * refetch er default time hocche 1 minutes .. mane hocche 1 minute er moddhe 
+         * previous page e gele ...fetch hobe na .. ager content e dekhabe .. kintu 1 minute pore 
+         * previous page e gele .. data server theke abar fetch hobe .. 
+         */
         addVideo: builder.mutation({
             query: (data) => ({
                 url: "/videos",
