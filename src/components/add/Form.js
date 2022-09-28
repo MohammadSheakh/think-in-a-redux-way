@@ -8,6 +8,22 @@ import TextInput from "../ui/TextInput";
 
 export default function Form() {
     const [addVideo, { isLoading, isSuccess, isError }] = useAddVideoMutation();
+    /**
+     * query er belay amra actual data ta pai.. and amra ekta object petam .. but ekhane amra tuple pabo ..
+     * and ei tuple er moddhe first part e amake oi function ta diye dibe .. apiSlice er moddhe .. jei
+     * addVideo End Point ta likhsilam .. shei function ta ..2nd part e amra oi object ta pabo .. jeta
+     * amra query er belay petam.. data ta pabo .. data ta mane .. amar add request pathanor pore server
+     * jei response ta diyeche ..shei response ta ami data er moddhe pabo ... data: video, isLoading....
+     *
+     * useAddVideoMutation(); eita kintu automaticaly call hobe na .. karon eita to GET Request na.. She
+     * oi poriman smart..
+     *
+     * amra addVideo function ta call korte parbo ..and sheta call korar shomoy amra amader data ta diye dibo ..\
+     *
+     * 😀 Video add korar pore jeno Home page ta automatic data fetch kore niye ashe .. sheta amra next video te
+     * kora shikhbo .. Cache Behavior - Revalidation
+     *
+     */
 
     const [title, setTitle] = useState("");
     const [author, setAuthor] = useState("");
@@ -29,8 +45,9 @@ export default function Form() {
         setViews("");
     };
 
+    // handleSubmit nam e amar ekta function banate hobe
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // page jeno reload na ney
         addVideo({
             title,
             description,
@@ -40,8 +57,8 @@ export default function Form() {
             date,
             duration,
             views,
-        });
-        resetForm();
+        }); // addVideo() function er moddhe data gula object akare pass kore dilam
+        resetForm(); // finally reset koreo dite hobe form ta ..  ..
     };
 
     return (
@@ -116,14 +133,14 @@ export default function Form() {
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button
-                        disabled={isLoading}
+                        disabled={isLoading} // jokhon loading obosthay ase .. tokhon jeno pess na korte pare ..
                         type="submit"
                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-indigo-500"
                     >
                         Save
                     </button>
                 </div>
-
+                {/* // Response  */}
                 {isSuccess && (
                     <Success message="Video was added successfully" />
                 )}

@@ -136,7 +136,16 @@ export const apiSlice = createApi({
          * 😀 keepUnusedDataFor: 600 er maddhome .. ami 5 dile .. eta 5 second porei data re-fetch korbe
          *
          */
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        /**
+         * ekhon amra mutation niye dekhbo .. post, put, patch , delete .. jegula server e change kore
+         * data send korte hoy amader ke .. egula handle kora shikhbo
+         * new end point create korbo .. addVideo nam e .. and last e kintu she amake mutation er jonno
+         * ekta hook diye dibe .. useAddVideoMutation.. Query gular jonno last e Query lagiye dey ..
+         * ar Mutation gular jonno last e Mutation lagiye dey
+         */
         addVideo: builder.mutation({
+            // query : (data) => '/videos', // eta dile to amader hobe na .. ekta function .. jeta return kore ekta string .. amra etai disi .. but amader ke ekta object pathate hobe
             query: (data) => ({
                 url: "/videos",
                 method: "POST",
