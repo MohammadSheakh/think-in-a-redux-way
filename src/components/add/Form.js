@@ -21,8 +21,10 @@ export default function Form() {
      * amra addVideo function ta call korte parbo ..and sheta call korar shomoy amra amader data ta diye dibo ..\
      *
      * 😀 Video add korar pore jeno Home page ta automatic data fetch kore niye ashe .. sheta amra next video te
-     * kora shikhbo .. Cache Behavior - Revalidation
+     * kora shikhbo .. Cache Behavior - Revalidation .. onno khetre home page jeno ekta nirdishto time pore
+     * data fetch kore but  video add page er belay .. shathe shathei fetch kora uchit
      *
+       // she jei cash ta maintain kore sheta ke add video file er jonno invalidate kore dite hobe 
      */
 
     const [title, setTitle] = useState("");

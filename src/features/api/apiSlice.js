@@ -43,7 +43,9 @@ export const apiSlice = createApi({
          *
          */
     }),
-    tagTypes: ["Videos", "Video", "RelatedVideos"],
+    tagTypes: ["Videos", "Video", "RelatedVideos"], // ekhane amra amader white listed tag gula bole dibo
+    // store configure houar shomoy e she bujhe jabe .. amake ei ei tag maintain korte hobe ..
+    // er pore amra bivinno request e tag provide korbo..
     /**
      * baseQuery er pore third jei jinish ta amake dite hobe ... sheta hocche end-points ..
      * amar application e joto end-point ase .. joto API ase.. amra age joto gula feature ase ..
@@ -96,7 +98,34 @@ export const apiSlice = createApi({
              * -------------------------------------------
              * Advance Configuration
              */
-            providesTags: ["Videos"],
+            // she jei cash ta maintain kore sheta ke add video file er jonno invalidate kore dite hobe
+            /**
+             * she je cash ta maintain kore .. cash mane ki .. amader je local storage e ekta cash kore data
+             * ta rekhe dicche .. and she jokhon tar storage e rakhse .. she definately kono ekta id diye
+             * rakhse .. ba kono ekta identifier diye indexing kore rakhse ..evabe chinta korte paren ..
+             * /videos ei request tai kintu tar ek matro id ..so ei request er against e .. she dhore nicche
+             * amar jodi request URL eitai hoy .. taholei ami shudhu matro omuk cash ta dekhay dibo ..
+             *
+             * ar  `/videos/${videoId}` er maddhome prottek ta single video jokhon ansen .. tokhon ek ekta
+             * video kintu ek ekta dynamic id ..so , dhoren .. videos/1 .. shetar jonno ekta cash ase ..
+             * videos/2 .. shetar jonno ekta cash ase ..tar moto kore she rakhse .. ekhon porjonto amra
+             * tar storage e kono control nei nai .. ebar amra shei control ta nibo .. ei file e boshe
+             *
+             * sheta hocche amra tag lagabo .. nijeder tag ..she tar tag lagacche .. amra nijeder tag lagabo
+             * tailei amra identify korte parbo .. je omuk request er jonno tumi wait korba na .. shathe shathe
+             * data fetch korba .. .***** ekhane apni array of tag dite paren .. multiple tag dite paren ..
+             * eita kintu apnar deowa nam .. sheita abar ta ke shuru te chinay diye ashte hobe ..je vai...
+             * ei ei tag amar white listed .. jekono tag tumi nite parba na ..tahole she set up er shomoy shei
+             * tag gula diye niye nibe ..shei white listing ta amra korte parbo .. endpoints: er age .. amra
+             * bolbo .. tagTypes...
+             */
+            providesTags: ["Videos"], // ekhane jehetu tag ta lagabo .. so, providesTags
+            // so ami ei request ke ekta tag dilam .. jeno ta ke chinte pari .. amar way te ..tar way te na ..
+            // tar hijibiji id diye na ..
+            /**
+             * ei je tag provide korlam na .. ekhon amar kaj hocche jokhon ami video add korbo tokhon bolbo
+             * ["Videos"] ei tag owala requst jegula ase .. shegula ke invalidate kore deo ..
+             */
         }),
         /**
          * ekhon kotha hocche ei getVideos to automatic call hobe na ..eta ke call korbo kivabe
@@ -150,19 +179,36 @@ export const apiSlice = createApi({
                 url: "/videos",
                 method: "POST",
                 body: data,
-            }),
-            invalidatesTags: ["Videos"],
+            }), // jokhon ei ei query ta successfull hobe .. tokhon e she dekhbe .. invalidatesTags er moddhe kichu ase kina
+            invalidatesTags: ["Videos"], // mane tumi ["Videos"] tags ta ke invalidate kore deo
+            /**
+             * oi je tag provide korsilam na getVideos e .. ekhon amar kaj hocche jokhon ami video add korbo tokhon
+             *  bolbo ["Videos"] ei tag owala requst jegula ase .. shegula ke invalidate kore deo ..
+             *
+             * ["Videos"] ke provide koreche ke .. getVideos().. tahole getVideos() er jei result ta .. sheta ke
+             * she cash theke delete kore dibe .. jar karone new request abar re-fetch hobe ..
+             */
         }),
         editVideo: builder.mutation({
+            // jei video te edit button e press kortesi .. shei video tar information .. fill up obosthay ..
+            // edit form e ashar kotha .. ekhon jodi edit korar page e direct keo ashe .. taile kintu information
+            // gula paowa jabe na .. tai edit page e jokhon keo jabe .. tokhon link er id theke video er information
+            // ene .. tarpor shekhan e fill up kore ..tarpore data update korte hobe
             query: ({ id, data }) => ({
+                // jehetu duita jinish lagbe .. tai object akare niye nilam
                 url: `/videos/${id}`,
-                method: "PATCH",
+                method: "PATCH", // ebar amra arekta mutation er kaj korbo .. sheta hocche edit video
                 body: data,
             }),
+            // ekta single video edit korle jei jei Component gular cash invalid kore dite hobe .. sheta bole dicchi
+            // karon single video edit kore nam change korle .. oi notun nam er upor base kore amake related video dekhate hobe
+            // abar jei information update korlam .. sheta kintu oi video er cash remove na korle tokhon e show korbe na ..
+            // Home page eo updated information ta show korbe na .. karon shetao cash hoye ase .. so .. shekhaneo content re-fetch korte hobe
             invalidatesTags: (result, error, arg) => [
                 "Videos",
                 { type: "Video", id: arg.id },
-                { type: "RelatedVideos", id: arg.id },
+                { type: "RelatedVideos", id: arg.id }, // eta kintu dynamic list ..ek ekta video er jonno
+                // related video kintu different different ..
             ],
         }),
         deleteVideo: builder.mutation({

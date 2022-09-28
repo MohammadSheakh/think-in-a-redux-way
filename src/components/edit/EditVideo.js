@@ -4,8 +4,9 @@ import Error from "../ui/Error";
 import Form from "./Form";
 
 export default function EditVideo() {
+    // video.js e already jinish ta ase .. copy kore niye ashlam
     const { videoId } = useParams();
-    const { data: video, isLoading, isError } = useGetVideoQuery(videoId);
+    const { data: video, isLoading, isError } = useGetVideoQuery(videoId); // single video load korar jonno jeta sheta amra niye chole ashi
 
     let content = null;
 
@@ -15,6 +16,7 @@ export default function EditVideo() {
     if (!isLoading && isError) {
         content = <Error message="There was an error!" />;
     }
+    // ami edit video er form ta load e korbo na .. jotokkhon porjonto amar information available na hoy
     if (!isLoading && !isError && video?.id) {
         content = <Form video={video} />;
     }

@@ -6,6 +6,7 @@ import TextArea from "../ui/TextArea";
 import TextInput from "../ui/TextInput";
 
 export default function Form({ video }) {
+    // EditVideo.js theke pathano hoise ...
     const {
         id,
         title: initialTitle,
@@ -16,11 +17,12 @@ export default function Form({ video }) {
         date: initialDate,
         duration: initialDuration,
         views: initialViews,
-    } = video;
+    } = video; // destructure kore nilam .. then alias kore rename kore nilam
 
-    const [editVideo, { isLoading, isError, isSuccess }] =
-        useEditVideoMutation();
+    const [editVideo, { data: editedVideo, isLoading, isError, isSuccess }] =
+        useEditVideoMutation(); // function ta amader ke dise .. jeita mane endpoint ta apiSlice e edit er jonno likhsilam
 
+    // database theke jei information gula niye ashsi .. shegula initial obosthay set kore dilam
     const [title, setTitle] = useState(initialTitle);
     const [author, setAuthor] = useState(initialAuthor);
     const [description, setDescription] = useState(initialDescription);
@@ -33,6 +35,7 @@ export default function Form({ video }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         editVideo({
+            //
             id,
             data: {
                 title,
@@ -45,6 +48,8 @@ export default function Form({ video }) {
                 views,
             },
         });
+        // handleSubmit e reset form call hobe na .. kintu ekta button thakle better hoy .. jeta press korle
+        // form reset hoye jabe ..
     };
 
     return (
@@ -119,7 +124,7 @@ export default function Form({ video }) {
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button
-                        disabled={isLoading}
+                        disabled={isLoading} // loading obosthay button ta disabled thakbe ..
                         type="submit"
                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-indigo-500"
                     >
