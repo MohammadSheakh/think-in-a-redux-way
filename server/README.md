@@ -7,3 +7,5 @@
 5. আপনার ব্রাঞ্চ সিলেক্ট করুন।
 6. Deploy branch এ ক্লিক করে ডেপ্লয় করুন।
 7. না বুঝতে পারলে এই ভিডিওটি দেখুন - https://learnwithsumit.com/courses/think-in-a-redux-way/how-to-deploy-server-to-heroku
+
+// password hashing er bepar ta kintu json server e kore diyeche
