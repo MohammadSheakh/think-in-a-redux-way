@@ -235,12 +235,16 @@ export const apiSlice = createApi({
             ],
         }),
         deleteVideo: builder.mutation({
+            // delete korar khetre amar shudhu ekta id pelei hobe ..
             query: (id) => ({
                 url: `/videos/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["Videos"],
+            invalidatesTags: ["Videos"], // videos tags e invalidate kore dibo .. jeno cash delete hoye .. notun kore fetch hoy
         }),
+        // ekta hook export kore dibo ei file theke .. jei hook ta component theke call korle .. she amader ke ei deleteVideo
+        // function ta diye dibe .. button er onClick e call kore dite hobe // video -> description file e kaj korte hobe
+        // ekta tuple dibe .. jehetu hook
     }),
 });
 

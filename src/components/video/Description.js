@@ -7,17 +7,31 @@ import Error from "../ui/Error";
 
 export default function Description({ video }) {
     const { title, date, id, description } = video;
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // delete korar pore jehetu ekta page e redirect korte hobe .. tai eta ke import korlam
 
     const [deleteVideo, { isSuccess, isLoading, isError }] =
         useDeleteVideoMutation();
+    // ekta hook export kore dibo ei file theke .. jei hook ta component theke call korle .. she amader ke ei deleteVideo
+    // function ta diye dibe // video -> description file e kaj korte hobe
+    // ekta tuple dibe .. jehetu hook
+    // json server delete korle kono data send kore na
 
     const handleDelete = () => {
-        if (id) deleteVideo(id);
+        if (id) deleteVideo(id); //
+        /**
+         *eta kintu ekta asynchronous kaj .. amake handleDelete korei porer page e jaowa jabe na .. server e
+         * request gia .. shekhan theke delete hoile .. tarpore confirmation paile .. tarpor ami onno page e
+         * jabo .. mane success ta paowar porei redirect korte hobe .. otherwise kintu amake error dekhiye
+         * boshe thakte hobe .. ejonno amake useEffect use korte hobe .. karon deleteVideo call korar pore
+         * updated jei result ta .. sheta kintu ami porer render e pabo ...  isSuccess kintu ami ei render e
+         * pabo na ..
+         *
+         */
     };
 
     useEffect(() => {
-        if (isSuccess) navigate("/");
+        // handleDelete function call houar pore
+        if (isSuccess) navigate("/"); // success paile navigate kore dibo new page e
     }, [isSuccess, navigate]);
 
     return (
