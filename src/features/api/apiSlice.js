@@ -46,6 +46,9 @@ export const apiSlice = createApi({
     tagTypes: ["Videos", "Video", "RelatedVideos"], // ekhane amra amader white listed tag gula bole dibo
     // store configure houar shomoy e she bujhe jabe .. amake ei ei tag maintain korte hobe ..
     // er pore amra bivinno request e tag provide korbo..
+    // jehetu single video ke invalide korbo // jehetu video nam er new ekta type invalid korbo bolsi .. to amake upore tag types e tar nam bole dite hobe
+    // sheta ke white listed kore dite hobe ..taile she janbe video namok o arekta category ase ..
+    // etar mane hocche Video namok ekta tag category .. jar id hocche video id ta
     /**
      * baseQuery er pore third jei jinish ta amake dite hobe ... sheta hocche end-points ..
      * amar application e joto end-point ase .. joto API ase.. amra age joto gula feature ase ..
@@ -119,6 +122,7 @@ export const apiSlice = createApi({
              * tag gula diye niye nibe ..shei white listing ta amra korte parbo .. endpoints: er age .. amra
              * bolbo .. tagTypes...
              */
+            // common list er jonno texual jinish tag hishebe provide koreche ..
             providesTags: ["Videos"], // ekhane jehetu tag ta lagabo .. so, providesTags
             // so ami ei request ke ekta tag dilam .. jeno ta ke chinte pari .. amar way te ..tar way te na ..
             // tar hijibiji id diye na ..
@@ -136,6 +140,9 @@ export const apiSlice = createApi({
         getVideo: builder.query({
             query: (videoId) => `/videos/${videoId}`,
             providesTags: (result, error, arg) => [{ type: "Video", id: arg }],
+            // ekhane shorashori arg hobe .. karon arg er moddhei videoId peye gechi ... she shudhu tar ta provide korbe ..
+            // emon o hote pare .. apni arg er moddhe id ta pacchen na .. ejonno she result o diye diyeche ..
+            // result er moddheo id paowa jabe .. console log kore dekhte paren
         }),
         getRelatedVideos: builder.query({
             // ?title_like=boom&title_like=nice&_limit=4
@@ -149,8 +156,11 @@ export const apiSlice = createApi({
                 // convert korte hobe ... array.join() method call kore string banate pari
                 return queryString;
             },
+            // eta jehetu different type er result return kore .. 1 number return kore , 2  number return kore..
+            // so, prottek tar jonno alada alada tag return kore .. she boshe gese dynamically
             providesTags: (result, error, arg) => [
                 { type: "RelatedVideos", id: arg.id },
+                // ekhane arg.id hobe .. karon arg ta ekta object receive kore..tar moddhe id ase..she shudhu tar ta provide korbe ..
             ],
         }),
         /**
@@ -205,10 +215,23 @@ export const apiSlice = createApi({
             // abar jei information update korlam .. sheta kintu oi video er cash remove na korle tokhon e show korbe na ..
             // Home page eo updated information ta show korbe na .. karon shetao cash hoye ase .. so .. shekhaneo content re-fetch korte hobe
             invalidatesTags: (result, error, arg) => [
+                // ekhane array dicchilam .. ekhane amra callback function o dite pari .. jei callback function ta return korbe ekta array
+                // edit video houar pore jei result ta ashse ..network e jei result ta ashse .. sheta dia jodi amake kono dynamically id
+                // banate hoy .. arg mane hocche { id, data } eita .. jeita query receive kore ..
                 "Videos",
-                { type: "Video", id: arg.id },
+                // jehetu single video ke invalide korbo // jehetu video nam er new ekta type invalid korbo bolsi .. to amake upore tag types e tar nam bole dite hobe
+                // sheta ke white listed kore dite hobe ..taile she janbe video namok o arekta category ase ..
+                // etar mane hocche Video namok ekta tag category .. jar id hocche video id ta
+                { type: "Video", id: arg.id }, // ekhane kintu shora shori string er pasha pashi object o dite pari ..
+                // mane ek ekta tag simple na o hote pare ..she to ekta dynamic tag ..
                 { type: "RelatedVideos", id: arg.id }, // eta kintu dynamic list ..ek ekta video er jonno
-                // related video kintu different different ..
+                // related video kintu different different .. ejonno etar jonno nam bolte hobe .. ar tar id o
+                // o bolte hobe .. karon id 1 er ekta nam , id 2 er ekta nam .. so ami 2 ta dynamic tag banailam
+                /**
+                 * arekta kaj baki ase .. ami invalidate korechi ..kintu provide kintu kori nai kothao ..provide na korle she to
+                 * bujhbe na .. kon jinish ta invalidate korte hobe ..single video er khetre amar getVideo ..so, oi khan e amake
+                 * provideTags korte hobe ..ekhane jevabe invalidatesTags create korechi .. provide tags eo same vabe kora jabe
+                 */
             ],
         }),
         deleteVideo: builder.mutation({
