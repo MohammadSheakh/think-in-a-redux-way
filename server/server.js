@@ -57,3 +57,7 @@ app.use(router);
 server.listen(port);
 // 🔥ultimately ami jinish ta ke full up and running korechi .. documentation dekhe ..
 // 🔥 amra shudhu janbo je .. kon kon route e hit korle amra ki ki pai
+
+/**
+ * amader API ready ase .. amra ekhon redux toolkit er maddhome request kore kore data dekhabo and
+ */
