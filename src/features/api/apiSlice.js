@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+// react theke na nile hook pabo na .. node.js er jonno /query theke nite hoy
 import { userLoggedOut } from "../auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
