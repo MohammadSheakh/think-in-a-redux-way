@@ -10,7 +10,12 @@ export default function Login() {
     const [error, setError] = useState("");
 
     const [login, { data, isLoading, error: responseError }] =
-        useLoginMutation();
+        useLoginMutation(); // authAPI theke hook ta ke call korlam .. she amader ke login function retun kore
+    // jeta amra handleSubmit e data provide kore call korte pari.. function call hole .. er response e
+    // she amader ke data error isLoading .. egula dey .. jegula amra useEffect use kore catch kori ..
+    // tar basis e amra error dekhai .. nahole navigate kori onno page e .. ..
+
+    // loading er time e button disabled kore rakhi .. error hole .. error message show kori ..
 
     const navigate = useNavigate();
 

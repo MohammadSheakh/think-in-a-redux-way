@@ -2,13 +2,34 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // react theke na nile hook pabo na .. node.js er jonno /query theke nite hoy
 import { userLoggedOut } from "../auth/authSlice";
 
+// amra jani proti ta request e base query er moddhe diye jay .. prepareHeaders function ta prottek ta khetre ek bar
+// kore call hoy..
 const baseQuery = fetchBaseQuery({
     // er moddhe amader ekta object bole dite hoy
     baseUrl: process.env.REACT_APP_API_URL, // baseUrl ta amra env file theke niye ashbo
+    /**
+     * shei kaj ta korar jonno amra fetchBaseQuery er notun ekta jinish niye kaj korbo
+     * amra request header e kaj korchi .. tar mane etar jonno tar ekta prepareHeaders nam e arrow function ase ..amra ekhane
+     * async function erokom nite pari .. shei function er moddhe parameter e .. amra kichu jinish potro pai .. ekta
+     * hocche headers .. request er default je header gula.. and arekta object ami pai . shekhane getState ar currently
+     * amar jei endpoint ta running .. jemon dhoren apni /api e hit korechen .. taile tokhon endpoint hobe /api ..
+     * mane end points gula hocche shoja kothay .. features jegula ase .. jemon authApi er khetre apnar endpoints
+     * hote pare .. register ba login .. to , apni jodi kono endpoint specific kaj korte chan .. she jonno she apnake
+     * endpoint tao diye diyeche .. je apni dhoren chacchen .. specific endpoint jodi shudhu matro inbox hoy .. tahole
+     * ami shudhu matro access token pathabo .. shetao apni korte paren .. amra eta checking na kore .. access token
+     * available thaklei amra pathiye dibo amader khetre ..
+     * so erokom ekta function she amake diye dicche .. shei function theke jodi ami ekta updated headers return kore
+     * dei .. taile oi headers tai ultimately jabe .. prottek ta request er shathe ..
+     */
+    // amra jani proti ta request e base query er moddhe diye jay .. prepareHeaders function ta prottek ta khetre ek bar
+    // kore call hoy.. and she dekhbe amar user eta ke customize kore diyeche kina
     prepareHeaders: async (headers, { getState, endpoint }) => {
-        const token = getState()?.auth?.accessToken;
+        // tai er vitor e amake check korte hobe .. jodi amar state er moddhe already accessToken theke thake ?
+        // tahole ami header er shathe Authorization Header ta add kore pathiye dibo ..
+        const token = getState()?.auth?.accessToken; // jehetu optional chaining use korsi .. so, na thakle undefined thakbe
         if (token) {
-            headers.set("Authorization", `Bearer ${token}`);
+            // jodi token exist kore .. tahole ami header er shathe dhukiye dibo ..
+            headers.set("Authorization", `Bearer ${token}`); // header er nam hocche Authorization
         }
 
         return headers;
@@ -21,6 +42,9 @@ export const apiSlice = createApi({
     reducerPath: "api",
     // baseQuery:fetchBaseQuery() // jevabe amra axios e base URL set kori .. ei base query diye amader shob query ghure ashe
     // eta hocche amader base class .. eta ke extend kore amra onno API gula banai
+
+    // amra jani proti ta request e base query er moddhe diye jay .. prepareHeaders function ta prottek ta khetre ek bar
+    // kore call hoy.. and she dekhbe amar user eta ke customize kore diyeche kina
     baseQuery: async (args, api, extraOptions) => {
         let result = await baseQuery(args, api, extraOptions);
 
