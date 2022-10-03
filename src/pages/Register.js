@@ -5,40 +5,64 @@ import Error from "../components/ui/Error";
 import { useRegisterMutation } from "../features/auth/authApi";
 
 export default function Register() {
+    // form er state gula local state diye handle korte hobe ..
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [agreed, setAgreed] = useState(false);
-    const [error, setError] = useState("");
+    const [agreed, setAgreed] = useState(false); // checkbox
+    const [error, setError] = useState(""); // password confirm passoword na match korle .. jei error dekhabo
+    // sheta ekhane rakhbo
 
-    const [register, { data, isLoading, error: responseError }] =
-        useRegisterMutation();
+    // error nam e already ekta jinish declare korechi .. tai alias kore dilam
+    const [register, { data, isLoading, error: responseError }] = //isError o ante partam .. tobe ami error message tai niye ashlam .. jodi kono error thake
+        useRegisterMutation(); /// Hook ta call korle .. tara amake API function ta diye dey .. sheta amra
+    // onSubmit e call korbo .. er moddhe data pass kore dibo ... // authApi theke hook ta ashse ..
+    // amra ekta tuple pai .. tar moddhe amra register function ta pabo .. and etar je data gula ..
+    // jei response gula .. sheta amra data er moddhe pabo ..
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        // register ta jodi successful hoy .. taile
+        console.log("data from components > pages > Register.js : 🔗", data);
+        console.log("error from components > pages > Register.js : 🔗", error);
         if (responseError?.data) {
+            // mane amar error hoyeche ..
             setError(responseError.data);
         }
         if (data?.accessToken && data?.user) {
-            navigate("/inbox");
+            // jodi successful hoy ..
+            navigate("/inbox"); // tahole ami ta ke /inbox e navigate kore dibo ..
         }
+        // data, responseError, navigate .. ei 3 ta jinish jodi change hoy .. taile ei useEffect ta call hobe ..
     }, [data, responseError, navigate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setError("");
+        setError(""); // Error ta age null kore nilam
 
         if (confirmPassword !== password) {
             setError("Passwords do not match");
         } else {
             register({
+                // form er data ta diye dite hobe ..
                 name,
                 email,
                 password,
             });
+            /**
+             * handle submit shob kichu thik thak thakle .. she register request korbe ..ekhon register
+             * request korar pore ..request ta successful hole ba failed hole .. ami kintu data ,
+             * isLoading , isError er moddhe jinish ta ta pai ..
+             *
+             * submit korar por .. amar register function call korar por .. ei data ta to ami ekhane
+             * pabo na .. eta amake useEffect diye dhorte hobe .. karon request ekta gese .. response
+             * ta ashbe jokhon .. tar mane ki .. tokhon she data te change anbe .. data first e
+             * blank chilo .. ekhon she tar moddhe information vore dibe .. hoy response ashbe .. na hoy
+             * error ashbe .. kichu ekta ashbe ..
+             */
         }
     };
 
@@ -138,7 +162,7 @@ export default function Register() {
                                 />
                             </div>
                         </div>
-
+                        {/* ekta check box ase ... */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <input
@@ -146,10 +170,10 @@ export default function Register() {
                                     name="agree"
                                     type="checkbox"
                                     className="h-4 w-4 text-violet-600 focus:ring-violet-500 border-gray-300 rounded"
-                                    checked={agreed}
+                                    checked={agreed} // value er jaygay checked likhte hobe ..
                                     required
-                                    onChange={(e) =>
-                                        setAgreed(e.target.checked)
+                                    onChange={
+                                        (e) => setAgreed(e.target.checked) ////////////////////////////
                                     }
                                 />
                                 <label
@@ -160,18 +184,16 @@ export default function Register() {
                                 </label>
                             </div>
                         </div>
-
                         <div>
                             <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
-                                disabled={isLoading}
+                                disabled={isLoading} // loading stage e button disabled kore dicchi
                             >
                                 <span className="absolute left-0 inset-y-0 flex items-center pl-3"></span>
                                 Sign up
                             </button>
                         </div>
-
                         {error !== "" && <Error message={error} />}
                     </form>
                 </div>

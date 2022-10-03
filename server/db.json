@@ -155,6 +155,12 @@
       "password": "$2a$10$.Yw4t3v3IwR3dPm4rvAskOHwK1Clu7sLY.i.hxPRztsUF4U9fYN4S",
       "name": "Test 23",
       "id": 26
+    },
+    {
+      "email": "maria.maliha@gmail.com",
+      "password": "$2a$10$IeY2/Iqt6Lpw6zUn5IKPIOpxceTT2kcCakvp6WbfqxynSbaNT02Pu",
+      "name": "t",
+      "id": 27
     }
   ],
   "conversations": [
