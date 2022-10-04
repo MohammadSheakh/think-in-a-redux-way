@@ -6,3 +6,8 @@ export default function PrivateRoute({ children }) {
 
     return isLoggedIn ? children : <Navigate to="/" />;
 }
+
+/**
+ * jodi user logged in thake .. taile Private Route diye jake Wrap kore diyecho .. take jete
+ * diba ..
+ */

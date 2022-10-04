@@ -8,8 +8,15 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 function App() {
-    const authChecked = useAuthCheck();
+    // ami check korbo local storage e jinish ase kina .. jodi amar local storage e jinish thake .. tahole amar
+    // redux store e to amar slice er action likhai ase.. UserLoggedIn .. mane .. ami jodi localStorage e ..
+    // access token and user pai .. ami ami ei jaygay check kore .. ami amar redux store update kore felbo ..
+    // tar pore amar application as usual ager motoi cholbe ..
+    // so ei jayga tay amar ekta checking kora lagbe .. so shei checking ta ektu shundor standard way te korar
+    // jonno amar ekta hook banano lagbe ..
+    const authChecked = useAuthCheck(); // Custom hook call korlam ..
 
+    // jotokkhon porjonto amar authChecked ta false .. totokkhon porjonto ami Routing Component Load korbo na ..
     return !authChecked ? (
         <div>Checking authentication....</div>
     ) : (
@@ -23,7 +30,6 @@ function App() {
                         </PublicRoute>
                     }
                 />
-
                 <Route
                     path="/register"
                     element={
@@ -32,6 +38,13 @@ function App() {
                         </PublicRoute>
                     }
                 />
+                {/* Shob shomoy router kintu load hobe .. tahole ei khan e amader
+                ekta kaj baki thaklo .. sheta hocche Private Route check kora ..
+                Jei Jei Route ke amra protect korte chai .. karon Ei jayga tay
+                jokhon e Router Load hobe .. tokhon amra Rest Assure je ..
+                amader login checking done .. ekhon ami Redux Store er upor
+                dependent hoye ei Route gula te dhukte dibo .. ba dhukte dibo na
+                .. */}
                 <Route
                     path="/inbox"
                     element={
