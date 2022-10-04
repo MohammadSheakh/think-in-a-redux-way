@@ -7,8 +7,8 @@ export default function Navigation() {
     const dispatch = useDispatch();
 
     const logout = () => {
-        dispatch(userLoggedOut());
-        localStorage.clear();
+        dispatch(userLoggedOut()); // AuthSlice er userLoggedOut Action ta dispatch kore dilam ..
+        localStorage.clear(); // localStorage tao clear kore dite hobe ..
     };
     return (
         <nav className="border-general sticky top-0 z-40 border-b bg-violet-700 transition-colors">

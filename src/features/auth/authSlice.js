@@ -28,7 +28,7 @@ const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.user = action.payload.user;
         },
-        // ei nam ei action export korte hoy amader ke ..🔥 ei action gula dispatch kore dibo amra
+        // ei nam ei action export korte hoy amader ke ..🔥 ei action gula dispatch kore dibo amra Component theke
         userLoggedOut: (state) => {
             state.accessToken = undefined;
             state.user = undefined;
