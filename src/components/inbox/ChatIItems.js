@@ -98,7 +98,7 @@ export default function ChatItems() {
                                 <ChatItem
                                     avatar={gravatarUrl(partnerEmail, {
                                         // ekhane ami parter er email ta use korbo .. and gravatar ke use korbo
-                                        size: 80,
+                                        size: 80, // kon size er image chai
                                     })}
                                     name={name} // eta hocche parter er nam ta
                                     lastMessage={message}

@@ -7,13 +7,16 @@ import Messages from "./Messages";
 import Options from "./Options";
 
 export default function ChatBody() {
+    // ei khan e amra request ta korbo .. baki component gular moddhe props akare information ta pass kore dibo
     const { id } = useParams();
     const {
-        data: messages,
+        data: messages, // data pabo .. ager moto messages diye rename kore fellam
         isLoading,
         isError,
         error,
-    } = useGetMessagesQuery(id);
+    } = useGetMessagesQuery(id); // id ta kintu amar Route parameter e ase ..
+    // amra mone korte pari .. press korlei to id pass kore deowa jay .. kintu taile page ta reload dile ar kaj
+    // korbe na .. jeno page ta reload dileo indipendently kaj kore .. ejonno route parameter theke nibo amra
 
     // decide what to render
     let content = null;
