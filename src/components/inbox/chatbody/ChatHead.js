@@ -2,10 +2,12 @@ import getAvatar from "gravatar-url";
 import { useSelector } from "react-redux";
 
 export default function ChatHead({ message }) {
+    // ekta message kintu ekta object ..
     const { user } = useSelector((state) => state.auth) || {};
-    const { email } = user || {};
-    const { sender, receiver } = message || {};
+    const { email } = user || {}; // amar email ta abar niye ashlam ..
+    const { sender, receiver } = message || {}; // sender ar receiver ta ber kore nilam ..
 
+    // partner nam nam email dorkar .. sheta ber kore nilam ..
     const partnerEmail = sender.email === email ? receiver.email : sender.email;
     const partnerName = sender.email === email ? receiver.name : sender.name;
 

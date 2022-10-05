@@ -10,7 +10,10 @@ import isValidEmail from "../../utils/isValidEmail";
 import Error from "../ui/Error";
 
 export default function Modal({ open, control }) {
+    // form er state management er jonno amake local state manage korte hobe ..
     const [to, setTo] = useState("");
+    // ekta full email likha jokhon shesh hobe .. tokhon e amra request ta pathabo.. tar mane amake ekta valid
+    // email check korte hobe ., ami 😀javascript email regex  likhe search korchi ..
     const [message, setMessage] = useState("");
     const [userCheck, setUserCheck] = useState(false);
     const { user: loggedInUser } = useSelector((state) => state.auth) || {};
@@ -55,25 +58,59 @@ export default function Modal({ open, control }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAddConversationSuccess, isEditConversationSuccess]);
 
+    // debounceHandler function ta ami ekhane likhbo ..
     const debounceHandler = (fn, delay) => {
+        // she ekta function receive kore and delay ta receive kore ..
+        // amar kaj hocche ekhan theke arekta function return kore deowa .. jei function ta ashol event ta pay
+        // ei function tai hocche actual amar .. jei handler ta amra ekhane diye thaki ..
+        // {
+        //     (e) => handleSearch(e.target.value);
+        // }
+        // ei purata return er pore jei function likhtesi .. shekhan e eshe pouchacche ..
         let timeoutId;
         return (...args) => {
+            // event charao aro joto argument ase .. sheta ekhane nicchi .. karon aro argument thakte pare
+            // ei function er moddhe ami setTimeout korbo
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
+                // doSearch function ta ami ekhane call kore dibo
+                // eta to bar bar e hote thakbe .. so, amader ke jeta korbe hobe .. sheta hocche .. clear korte hobe
+                // mane she jodi 500 milisecond houar agei arekta type kore fele .. tokhon e to abar setTimeOut kora
+                // lagbe .. ejonno amra eta ke timeoutId nam er ekta jinish er moddhe rekhe .. ta ke clearTimeout function
+                // e ta ke pass kore dibo
                 fn(...args);
             }, delay);
         };
     };
 
+    // doSearch Function ta ami alada likhlam .. eta amar actual function ta .. mane jei kaj ta ami korbo ..
+    // debounce complete hoye jaowar pore , 500 milisecond hoye jaowar pore ami actual jei kaj ta korbo
     const doSearch = (value) => {
+        // event er value ta ekhane paowar kotha
+        /**
+         * ei jaygay kintu ekhon amra request ta pathabo kintu.. API request ta korbo ..
+         *  shei API REQUEST ta .. mane jei API Request ta ashole likha hoyeche .. kono valid user ashole
+         * oi email address er against e ase naki .. mane getUser diye amra jei API ta likhechilam ..
+         * sheta te pathabo .. kintu shob shomoy pathabo na .. jokhon amar full email ta esheche form e ..
+         * shei value ta jodi actually ekta email format er hoy .. taholei ami request ta pathabo .. otherwise
+         * ami request ta pathabo na ..
+         *
+         * Email Valid korar function ta kintu ami niye ashsi utils theke
+         */
         if (isValidEmail(value)) {
             // check user API
             setUserCheck(true);
-            setTo(value);
+            setTo(value); //😀jei kaj ta amar oi khan e korar kotha chilo .. sheta ami .. 500 milisecond pore korchi
         }
     };
 
-    const handleSearch = debounceHandler(doSearch, 500);
+    const handleSearch = debounceHandler(doSearch, 500); // handle search er kintu event ta paowar kotha
+    // kintu ami sheta na kore .. arekta function ekhane assign kore dicchi
+    // mane ami handleSearch function ta arekta function diye return koriye niye ashbo ..
+
+    // debounceHandler e bole dibo .. ami debounceHandler e ki korbo .. ami kichukkhon atkabo shekhane
+    // atkanor pore ami to kichu ekta kaj korbo .. so, amar kaj ta ki ? sheta hocche amar dhoren doSearch..
+    // and 500 milliseconds er ekta delay dilam ..
 
     const handleSubmit = (e) => {
         e.preventDefault();

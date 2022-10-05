@@ -104,17 +104,27 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 } catch (err) {}
             },
         }),
+        // 1. ekhon ami conversation API te chole jai .. amar prothom kaj hocche , amake ekta single conversation
+        //niye ashte hobe ..   mane jokhon e ekta user er email address diye search kora hobe .. tokhon e ami request
+        // kore dekhe nibo .. oi user er shathe .. jei user logged in asen .. tar kono conversation ase kina ..
         getConversation: builder.query({
+            // jei user logged in hoye asen.. shei user er email lagbe .. arekta hocche jei user ke message pathate
+            // chacchen tar email lagbe
+            // conversations node e hit korbo
             query: ({ userEmail, participantEmail }) =>
                 `/conversations?participants_like=${userEmail}-${participantEmail}&&participants_like=${participantEmail}-${userEmail}`,
         }),
         addConversation: builder.mutation({
+            // ebar hocche mutation
             query: ({ sender, data }) => ({
+                // mutation jehetu tai amra ekta object return kore dibo ..
                 url: "/conversations",
                 method: "POST",
                 body: data,
             }),
+            // arg er moddhe amra { sender, data } object ta pai
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                // queryFulfilled nam e ekta promise amra pai ekhan theke
                 const conversation = await queryFulfilled;
                 if (conversation?.data?.id) {
                     // silent entry to message table
@@ -139,9 +149,13 @@ export const conversationsApi = apiSlice.injectEndpoints({
             },
         }),
         editConversation: builder.mutation({
+            // definately kono ekta conversation id .. amader paramter e ashbe ..
             query: ({ id, data, sender }) => ({
+                // jehetu amra ek tai paramter receive korte pari .. tai amra ekta object niye nilam
+                // jar moddhe onek gula jinish receive korte pari .. jei jei jinish gula change korte
+                // chai .. shegulao nite hobe .. sheta ke data boltesi
                 url: `/conversations/${id}`,
-                method: "PATCH",
+                method: "PATCH", // edit er jonno PATCH boltesi
                 body: data,
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {

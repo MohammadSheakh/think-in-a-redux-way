@@ -12,6 +12,7 @@ export const messagesApi = apiSlice.injectEndpoints({
         // ekhon amra ei messages API ta amra use korte parbo .. amader right side er area ta te .. Chat Body
         // te .. UI te.. Component e .. ekhon ei query ta amra kothay korbo ..
         addMessage: builder.mutation({
+            // Message Insert korar jonno ..
             query: (data) => ({
                 url: "/messages",
                 method: "POST",
