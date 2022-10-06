@@ -86,7 +86,9 @@ export default function Modal({ open, control }) {
     // doSearch Function ta ami alada likhlam .. eta amar actual function ta .. mane jei kaj ta ami korbo ..
     // debounce complete hoye jaowar pore , 500 milisecond hoye jaowar pore ami actual jei kaj ta korbo
     const doSearch = (value) => {
-        // event er value ta ekhane paowar kotha
+        console.log("from Modal.js -> doSearch function from debounce : Hello");
+        // event er value ta ekhane paowar kotha // full event ta ashse .. shejonno shekhan thekei e.target.value
+        // pathate hobe
         /**
          * ei jaygay kintu ekhon amra request ta pathabo kintu.. API request ta korbo ..
          *  shei API REQUEST ta .. mane jei API Request ta ashole likha hoyeche .. kono valid user ashole
@@ -99,8 +101,13 @@ export default function Modal({ open, control }) {
          */
         if (isValidEmail(value)) {
             // check user API
+            console.log("doSearch Function -> Email is Valid From Modal.js ");
             setUserCheck(true);
+            // final shob check korar porei local state e set ta korlam ..
             setTo(value); //😀jei kaj ta amar oi khan e korar kotha chilo .. sheta ami .. 500 milisecond pore korchi
+            //🆕🆕 ekhon ami requst kore dekhbo je .. amar jei email ta esheche .. jei value ta esheche ..
+            // oi nam e kono user exist kore kina .. jodi user exist kore .. tahole ami porer step e jabo .. nahole
+            // oi khanei ta ke ami error diye dibo ..
         }
     };
 
@@ -168,6 +175,8 @@ export default function Modal({ open, control }) {
                                     onChange={(e) =>
                                         handleSearch(e.target.value)
                                     }
+                                    // Shudhu handleSearch likhle full event ta ashse ..
+                                    // shejonno shekhan thekei e.target.value pathate hobe
                                 />
                             </div>
                             <div>
