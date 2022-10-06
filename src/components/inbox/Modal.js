@@ -15,16 +15,23 @@ export default function Modal({ open, control }) {
     // ekta full email likha jokhon shesh hobe .. tokhon e amra request ta pathabo.. tar mane amake ekta valid
     // email check korte hobe ., ami 😀javascript email regex  likhe search korchi ..
     const [message, setMessage] = useState("");
-    const [userCheck, setUserCheck] = useState(false);
+    const [userCheck, setUserCheck] = useState(false); // skip true false korar jonno ..
     const { user: loggedInUser } = useSelector((state) => state.auth) || {};
     const { email: myEmail } = loggedInUser || {};
     const dispatch = useDispatch();
     const [responseError, setResponseError] = useState("");
     const [conversation, setConversation] = useState(undefined);
 
+    // request pathate parle participant er moddhe user er information ta ashbe ..
     const { data: participant } = useGetUserQuery(to, {
-        skip: !userCheck,
-    });
+        skip: !userCheck, // skip jodi ami true diye dei .. taile requst ta hobe na .. pore abar disable korte hobe ..
+    }); // ei API ta email dile amake bole dey shei email er kono user ase kina .. she amake data dey .. jeta ke
+    // alias kore participant nam diye dilam ..and she parameter e dui ta jinish ney .. email ta ney ..
+    // arekta object ney .. ekhon shudhu to likhe rekhe dile .. component mount houar time ei kintu eita execute
+    // hoye jabe .. API requst hoye jabe .. tokhon kintu amar to available nai .. kintu amake request ta korte hobe
+    // kintu 😀doSearch er moddhe ..setTo(value).. er pore .. tar mane ei  khan e amake automatic request handling
+    // ta off korte hobe .. jeta 🎯Module 8 e amra dekhechilam .. SKIP true diye amra sheta korte pari
+    // skip jodi ami true diye dei .. taile requst ta hobe na .. pore abar false korte hobe .. on off lagbe ..
 
     const [addConversation, { isSuccess: isAddConversationSuccess }] =
         useAddConversationMutation();
@@ -102,12 +109,27 @@ export default function Modal({ open, control }) {
         if (isValidEmail(value)) {
             // check user API
             console.log("doSearch Function -> Email is Valid From Modal.js ");
-            setUserCheck(true);
+            setUserCheck(true); // skip false kore dilam .. taile ekhon amar API request ta jabe ..
             // final shob check korar porei local state e set ta korlam ..
             setTo(value); //😀jei kaj ta amar oi khan e korar kotha chilo .. sheta ami .. 500 milisecond pore korchi
             //🆕🆕 ekhon ami requst kore dekhbo je .. amar jei email ta esheche .. jei value ta esheche ..
             // oi nam e kono user exist kore kina .. jodi user exist kore .. tahole ami porer step e jabo .. nahole
             // oi khanei ta ke ami error diye dibo ..
+            // ekhon amra sure je ekhane actual email formate ekhane ashbe .. ekhon jokhon tar lekha shesh hobe
+            // tokhon amra ekta API request kore dekhbo .. oi Email Address .. Asholei amar database e ase kina ..
+            // USER table e ase kina ..
+            /**
+             * ekhan theke hoy conversation  id ami pabo .. na hoy pabo na .. paowa ba na paowa .. er pore ami
+             * button disable korar decision nibo ..
+             *
+             * user to pailam .. ekhon amar next step hocche .. ami ki conversation table e EDIT korbo .. mane
+             * already ki tar shathe amar conversation ase ? .. sheta amake jante hobe .. tahole ami EDIT korbo
+             * ar na thakle ami ADD korbo .. tar mane valid user er shathe amar .. mane logged in USER .. tar kono
+             * conversation exist kore kina .. shei API ta amar call kora lagbe .. ekhoni .. sheta call kora lagbe ..
+             * kokhon ? amar ei USER Check hoye jaowar pore .. jodi USER thake  ? taholei amra porer ta korbo ...
+             * ei dependent query ta amra kivabe korte pari ..
+             *
+             */
         }
     };
 
@@ -195,7 +217,6 @@ export default function Modal({ open, control }) {
                                 />
                             </div>
                         </div>
-
                         <div>
                             <button
                                 type="submit"
@@ -209,8 +230,10 @@ export default function Modal({ open, control }) {
                                 Send Message
                             </button>
                         </div>
-
+                        {/* user valid na hole ami Error dibo.. je tumi message
+                        pathate parba na */}
                         {participant?.length === 0 && (
+                            // kono user na ashle ami ei text dekhabo ..
                             <Error message="This user does not exist!" />
                         )}
                         {participant?.length > 0 &&
