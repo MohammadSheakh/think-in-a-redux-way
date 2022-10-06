@@ -16,8 +16,9 @@ export default function Modal({ open, control }) {
     // email check korte hobe ., ami 😀javascript email regex  likhe search korchi ..
     const [message, setMessage] = useState("");
     const [userCheck, setUserCheck] = useState(false); // skip true false korar jonno ..
-    const { user: loggedInUser } = useSelector((state) => state.auth) || {};
-    const { email: myEmail } = loggedInUser || {};
+    const { user: loggedInUser } = useSelector((state) => state.auth) || {}; // logged in user er email ta niye ashlam
+    const { email: myEmail } = loggedInUser || {}; // shuru te jehetu eta thakbe na .. destructure korte giye error khabe .. tai
+    // blank object diye dilam // alias kore nam dilam myEmail
     const dispatch = useDispatch();
     const [responseError, setResponseError] = useState("");
     const [conversation, setConversation] = useState(undefined);
@@ -33,14 +34,28 @@ export default function Modal({ open, control }) {
     // ta off korte hobe .. jeta 🎯Module 8 e amra dekhechilam .. SKIP true diye amra sheta korte pari
     // skip jodi ami true diye dei .. taile requst ta hobe na .. pore abar false korte hobe .. on off lagbe ..
 
+    /**
+     * 😛participant kintu amra first render e kokhonoi pai na .. karon skip hoye gesilo ... amra porer render e useEffect
+     * er moddhe kintu sheta dhorte pari .. je .. data ta ashse kina .. so , ekta data change hoyeche ki hoy nai .. sheta
+     * listen korte chai ami .. shei khetre best hocche useEffect ..
+     */
+
     const [addConversation, { isSuccess: isAddConversationSuccess }] =
         useAddConversationMutation();
     const [editConversation, { isSuccess: isEditConversationSuccess }] =
         useEditConversationMutation();
 
     useEffect(() => {
+        // ekhane e participant ta listen korte hobe // kokhon ami conversation check er jonno pathabo .. jokhon amar
+        // participant ta must exist kore ..
         if (participant?.length > 0 && participant[0].email !== myEmail) {
-            // check conversation existance
+            // check conversation existance // oi user er shathe amar kono conversation ase kina .. shei checking ekhon amra korbo
+            /**
+             * conversationsApi er moddhe kintu amra API baniye rekhechilam getConversation nam e .. shekhan e amader ke dite
+             * hoy userEmail ar participantEmail .. taholei she amake bole dibe tar shathe amar kono conversation ase kina
+             * eta jehetu dependent .. ei bar ami ei call ta ektu different vabe korbo.. ta te apnara arekta format o dekhben ..
+             * and decide korte parben .. kokhon kivabe korben ..
+             */
             dispatch(
                 conversationsApi.endpoints.getConversation.initiate({
                     userEmail: myEmail,
@@ -236,11 +251,12 @@ export default function Modal({ open, control }) {
                             // kono user na ashle ami ei text dekhabo ..
                             <Error message="This user does not exist!" />
                         )}
+                        {/* participant er email ar amar email same hoye gele error
+                        dekhabo .. */}
                         {participant?.length > 0 &&
                             participant[0].email === myEmail && (
                                 <Error message="You can not send message to yourself!" />
                             )}
-
                         {responseError && <Error message={responseError} />}
                     </form>
                 </div>
