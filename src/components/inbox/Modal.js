@@ -54,6 +54,8 @@ export default function Modal({ open, control }) {
      * listen korte chai ami .. shei khetre best hocche useEffect ..
      */
 
+    // ekhon finally amader ke message send korte hobe .. so, amra add conversation and edit conversation API Hook ta niye ashlam
+    // jeta amader ke endpoint function ta diye dibe first parameter e ... Mutation ekhanei call hoye jay na ..
     const [addConversation, { isSuccess: isAddConversationSuccess }] =
         useAddConversationMutation();
     const [editConversation, { isSuccess: isEditConversationSuccess }] =
@@ -132,10 +134,10 @@ export default function Modal({ open, control }) {
         }
     }, [participant, dispatch, myEmail, to]);
 
-    // listen conversation add/edit success
+    // listen conversation add/edit success  //// Modal close korar jonno // conversation success hoile modal close kore dibo
     useEffect(() => {
         if (isAddConversationSuccess || isEditConversationSuccess) {
-            control();
+            control(); // Side Bar Component e gele bujha jabe jinish .. state jeta thakbe .. sheta change hoye jabe ..
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAddConversationSuccess, isEditConversationSuccess]);
@@ -223,10 +225,11 @@ export default function Modal({ open, control }) {
             // edit conversation // conversation id exist korle mane age tar shathe amar conversation hoise emon case e ..edit korbo
             editConversation({
                 id: conversation[0].id,
-                sender: myEmail,
+                sender: myEmail, //😀 je logged in user .. shei kintu sender ..
                 data: {
+                    // data hishebe conversation er body dite hoy
                     participants: `${myEmail}-${participant[0].email}`,
-                    users: [loggedInUser, participant[0]],
+                    users: [loggedInUser, participant[0]], // duita object pass kore dilam .. ekta array er moddhe
                     message,
                     timestamp: new Date().getTime(),
                 },
@@ -234,7 +237,8 @@ export default function Modal({ open, control }) {
         } else if (conversation?.length === 0) {
             //add conversation//conversation id exist na korle amar new conversation create korbo .. tar id automatic generate hobe
             addConversation({
-                sender: myEmail,
+                // addConversation e shudhu data ta dite hobe .. full object deowar dorkar nai .. id automatic create hoye jabe
+                sender: myEmail, //😀 je logged in user .. shei kintu sender ..
                 data: {
                     participants: `${myEmail}-${participant[0].email}`,
                     users: [loggedInUser, participant[0]],

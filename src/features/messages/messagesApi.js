@@ -23,3 +23,5 @@ export const messagesApi = apiSlice.injectEndpoints({
 });
 
 export const { useGetMessagesQuery, useAddMessageMutation } = messagesApi;
+// jehetu default export na .. export const .. tai import korar shomoy {} diye nite hobe
+// like this  ... import { messagesApi } from "../messages/messagesApi";

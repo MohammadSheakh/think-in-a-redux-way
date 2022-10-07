@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 import { apiSlice } from "../api/apiSlice";
-import { messagesApi } from "../messages/messagesApi";
+import { messagesApi } from "../messages/messagesApi"; // jehetu default export na .. export const .. tai import korar shomoy {} diye nite hobe
 
 // database er  conversation node e jodi amra hit kori .. tahole amra  API ta functional korte pari ..
 // Prothom kaj hocche conversationsApi File e amader ke API likhte hobe ..
@@ -122,28 +122,63 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
+            /**
+             *
+             * both khetrei ekta jinish common , jokhon e kono conversation add ba edit hobe .. tar mane definitely
+             *  thik tar porei .. message entry kintu hobe .. silently diye dite hobe .. ei kaj ta conversation add
+             *  ba edit .. duitar shathei shomporkito..  easy upay e kaj ta kivabe korte pari ? UI te change na
+             *  koreo amra kaj ta kivabe korte pari .. amader Conversation API jeta ase .. oi khane amar end point
+             *  gula likha ase .. addConversation and editConversation function likha ase .. ekta jokhon ghote jabe
+             *  ..  thik porei .. ami ashole message table e silently ekta entry diye dibo .. thik ase .. so, shei
+             *  kaj ta amra kivabe korte pari ? amra ei khanei korte pari .. amader UI te to kichu korar dorkar nai
+             *  .. so, ei query ke jodi ami porjobekkhon korte chai  and shetar promise shesh hole ekta kaj korbo ..
+             *  erokom korte gele .. amra ekhanei async onQueryStarted ... ei nam e amra ekta function niye chilam
+             * .. shekhane e amra parameter hishebe args pai ar ekta object er moddhe queryFulfilled ar dispatch ..
+             * . ei duita jinish amra pai .. 😛 so ei jayga theke erokom ekta async function diye dite hoy ..
+             * eita kokhon call hoy ? jei addConversation function call kora hoyeche .. mane query start hoyeche
+             * tokhon e call hoy... addConversation successfully houar pore amader kaj hocche ,return e response e
+             *  amra kintu ekta conversation ID pai .. jodi successfully hoy tar mane oi conversation ID ta must
+             * ashbe .. oi conversation Id ta paowar pore amra aste kore amader message table e , Message e to amar
+             * API likhai ase .. add Message korar .. sheta call kore dibo .. sheta jodi ami listen korte chai ..
+             * tahole queryFulfilled jei Promise ta .. ekhane tahole conversation ta pabo .. ei 😀 promise tar jonno
+             * amra Await korbo ..Await successfull hoye gele ..jodi amader conversation er id jodi thake
+             * tar mane amar ei request ta successfull hoyeche ..
+             */
             // arg er moddhe amra { sender, data } object ta pai
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 // queryFulfilled nam e ekta promise amra pai ekhan theke
                 const conversation = await queryFulfilled;
                 if (conversation?.data?.id) {
-                    // silent entry to message table
-                    const users = arg.data.users;
+                    // silent entry to message table // er pore amar kaj hocche ei jaygay message table e insert kora
+                    /**
+                     * amader sender user dui jon e ber kora lagbe .. // je logged in user .. shei kintu sender ..
+                     * sheta amader ekhane chole ashse .. abar amader kase users er data o ashse .. amra
+                     * duijon user er moddhe sender ke bad dilei receiver ke peye jabo .. jehetu amader identify kora lagbe
+                     */
+                    const users = arg.data.users; //😀karon oi pash theke Modal.js theke data ta ekta object hishebe ashse ..shekhan e users er moddhe dui jon er email e ase
                     const senderUser = users.find(
-                        (user) => user.email === arg.sender
+                        (user) => user.email === arg.sender // sender to ami jani.. karon sheta alada kore ashse
                     );
                     const receiverUser = users.find(
+                        // array er find method
                         (user) => user.email !== arg.sender
                     );
-
+                    /**
+                     * dispatch mode e .. jevabe amra manually hook chara korte pari . shei jinish tai amader ke
+                     * korte hobe ..tahole amake jeta korte hoeb messageApi theke endpoints er addMessage function
+                     * ba endpoint er initiate function call korte pari .. er moddhe parameter e object akare
+                     * ja ja she chay , shegula pass kore dite pari ..
+                     */
                     dispatch(
                         messagesApi.endpoints.addMessage.initiate({
+                            // full message body ta .. ta ke amake diye dite hoy .. ekhon amake database e jete hobe .. and dekhte hobe .. ekta message body er chehara kemon
                             conversationId: conversation?.data?.id,
                             sender: senderUser,
                             receiver: receiverUser,
                             message: arg.data.message,
                             timestamp: arg.data.timestamp,
                         })
+                        // shob kichu thik thakle message table e entry hoye jaowar kotha ..
                     );
                 }
             },
@@ -177,6 +212,7 @@ export const conversationsApi = apiSlice.injectEndpoints({
 
                 try {
                     const conversation = await queryFulfilled;
+                    // 😀 conversation.data er moddhe jinish thake ..
                     if (conversation?.data?.id) {
                         // silent entry to message table
                         const users = arg.data.users;
