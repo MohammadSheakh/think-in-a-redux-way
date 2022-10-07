@@ -20,8 +20,22 @@ export default function Modal({ open, control }) {
     const { email: myEmail } = loggedInUser || {}; // shuru te jehetu eta thakbe na .. destructure korte giye error khabe .. tai
     // blank object diye dilam // alias kore nam dilam myEmail
     const dispatch = useDispatch();
-    const [responseError, setResponseError] = useState("");
-    const [conversation, setConversation] = useState(undefined);
+    const [responseError, setResponseError] = useState(""); // conversation na eshe jokhon error hobe ..
+    // conversation hobe ekta array of object ...
+    /**
+     * conversation ta initially load houar time e undefined thakbe .. jotokhhon porjonto she undefined thakbe mane checking ta
+     * hoy ni amar .. checking hoye gele kintu hoy conversation amar blank hoye jabe .. na hoy shetar moddhe ekta array of object
+     * thakbe .. ami simply tahole totokkhon porjonto send Message e chap dite dibo na .. jotokkhon porjonto Conversation ..
+     * undefined ase ..
+     */
+    const [conversation, setConversation] = useState(undefined); // jokhon amar convesation available hoye jabe
+    // initially undefined kore nilam .. tahole amra conversation ta check korte parbo .. je amar conversation checking kora
+    // ta hoye gese kina .. karon conversation na peleo kintu ami message korte dibo .. ami undefined er shathe compare korbo
+    // 😛 conversation na pele ami add conversation korbo .. ar pele edit conversation korbo
+    // conversation jokhon she pabe na .. tokhon kintu sheta blank array dibe .. jokhon amar conversation shuru te initially
+    // check kora hoy nai .. tokhon undefined thakbe .. so, ami jeno undefined and blank array er moddhe jeno check korte pari ..
+    // she jonno eta ke undefined rekhechi ..
+    // thakle array of object , na thakle blank array naile undefined....
 
     // request pathate parle participant er moddhe user er information ta ashbe ..
     const { data: participant } = useGetUserQuery(to, {
@@ -55,19 +69,65 @@ export default function Modal({ open, control }) {
              * hoy userEmail ar participantEmail .. taholei she amake bole dibe tar shathe amar kono conversation ase kina
              * eta jehetu dependent .. ei bar ami ei call ta ektu different vabe korbo.. ta te apnara arekta format o dekhben ..
              * and decide korte parben .. kokhon kivabe korben ..
+             *
+             * amra kintu dekhen .. jokhon e kono request pathate chacchi RTK Query te .. tokhon e.. ekhon porjonto amra hook
+             * er maddhome korechi ..UseGetUserQuery() .. egula kintu hook .. amra jani hook kintu top level e kaj kore ..
+             * kono internal function er vitore kaj kore na .. amra chaile skip er maddhomeo korte pari .. but amra arekta way
+             * shikhbo .. amra jani RTK Query kintu amader kas theke shob kichu abstruct kore rakhse .. Hide kore rakhse ..
+             * onek code .. jegula amra age dekhe eshechi .. shegula kintu ekhon amra dekhtei parsi na .. like manually ekhon
+             * amra kintu action dispatch e korchi na .. API fire hoye jacche .. Async Thunk gula she automatically call korche ..
+             *
+             * Amra chaile manually Action Dispatch korte pari .. Oi je Conversation API amra likhechilam .. etar corresponding
+             * thunk function o kintu amader kase ache .. Shei Thunk Function gula amra call korte pari .. O ektu onno vabe dey
+             * jinish ta .. ei API tar nam ki Conversation API ..so, amra chacchi ekhane getConversation API ta call korbo...
+             * tahole action dispatch koreo amra korte pari kaj ta .. ejonno amra dispatch function ta niye ashlam ..
+             * amra normally jevabe async thunk dispatch kori .. shevabe manually RTK Query er jinish gula keo kora jay. Thunk ta
+             * ami pabo ki kore ? ... getConversation API er corresponding thunk ta ami pabo ki vabe ? sheta korar jonno
+             * conversationsApi.endpoints.getConversation.initiate() // ei function ta call korte hobe .. ei ta amader ke thunk
+             * return kore dey .. amra manually jevabe async thunk kora shikhechi .. amra chaile erokom model e .. hook use na
+             * kore manually function call koreo requst korte pari .. ei funciton ta jokhon amra dispatch korbo .. tokhon basically
+             * ek e kaj e hobe .. oi requst tai jabe .. initiate korar shomoy API file theke dekhe jei jei parameter chay
+             * tar value diye dite hobe .. value deowar order may be important na
+             *
+             *Conversation peye gechi .. ekhon amra ber korte parbo .. Conversation ID exist kore kina ..
+             *
              */
             dispatch(
                 conversationsApi.endpoints.getConversation.initiate({
                     userEmail: myEmail,
                     participantEmail: to,
                 })
+                // Conversation peye gechi .. ekhon amra ber korte parbo .. Conversation ID exist kore kina ..
+                // Conversation jehetu peye giyechi .. tai shekhan theke ami ID ta ber kore niye ami Edit korbo .. mane
+                // new ekta message , full message body edit kore .. shekhan e dhukiye dibo ..
+                /**
+                 * ar jodi ami na petam .. ekhane 0 petam .. tahole ami notun Conversation Add kortam ..
+                 *
+                 * tobe ekhane ekta catch ase .. amra ei je dispatch ta korlam .. eita to ekta async thunk .. etar porer line ei
+                 * kintu ami result ta pabo na .. tai na ? .. karon eita to Async Await er moto na ..tar mane eita kintu apnake
+                 * ekta promise dicche na ...eta just ekta Request korche .. eta ekta event er moto .. apnake listen korte hole
+                 * apni kivabe listen korben ..  amar to ei jayga ta tei listen kora dorkar chilo ashole .. ami jodi listen korte
+                 * partam .. mane then catch korte partam .. tahole eita korar porei ami kintu deceition nite partam .. karon amar
+                 * conversation er existance thakle ek rokom .. na thakle arek rokom .. and conversation ta amar neowa lagbe ..
+                 * karon jei result ta ashse .. karon amra je dekhlam .. jei result ta ashse .. ei result ta ami receive korbo
+                 * kothay .. karon jokhon ami hook use kortam .. tokhon ami 😛 Data er moddhe petam .. ei khetre ami pabo kivabe ..
+                 * ei khetre ami jodi porer line ei pete chai .. ami jodi async await er moto ba promise then er moto kore jodi pete
+                 * chai ..tahole amra ekhane unwrap() use korte paren .. unwrap() jeta korbe .. she apnake ekta promise dibe .. tar
+                 * mane hocche initially ekta async thunk call korechi .. eta ke promisify korar jonno .. promise e convert kore
+                 * niye ashar jonno .unwrap() apnake call korte hobe .. unwrap call korle ei ta ekta promise hoye gese .. ekhon apni
+                 * then o use korte paren .. async await o use korte paren .. amra ekhane then catch korlam ..
+                 */
             )
                 .unwrap()
                 .then((data) => {
-                    setConversation(data);
+                    setConversation(data); // then er moddhe jinish pabo //😛 mane conversation ta pabo // array of object dey
+                    // conversation tao dey
+                    // local state e save kore fela tai buddhiman er kaj
                 })
                 .catch((err) => {
-                    setResponseError("There was a problem!");
+                    // ekhane jodi kono ekta karone error hoy .. taile kintu ami kono deceition nite parbo na ..
+                    // error ta amra chaile handle kore felte pari
+                    setResponseError("There was a problem!"); // error er jonno o ekta local state handle kolam
                 });
         }
     }, [participant, dispatch, myEmail, to]);
@@ -157,10 +217,10 @@ export default function Modal({ open, control }) {
     // and 500 milliseconds er ekta delay dilam ..
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // jeno page reload na ney
 
         if (conversation?.length > 0) {
-            // edit conversation
+            // edit conversation // conversation id exist korle mane age tar shathe amar conversation hoise emon case e ..edit korbo
             editConversation({
                 id: conversation[0].id,
                 sender: myEmail,
@@ -172,7 +232,7 @@ export default function Modal({ open, control }) {
                 },
             });
         } else if (conversation?.length === 0) {
-            // add conversation
+            //add conversation//conversation id exist na korle amar new conversation create korbo .. tar id automatic generate hobe
             addConversation({
                 sender: myEmail,
                 data: {
@@ -236,7 +296,14 @@ export default function Modal({ open, control }) {
                             <button
                                 type="submit"
                                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+                                // amar kintu deceition neowa hoye gese.. ekhon amar send message kora baki ..
+                                // ei send message ta ke kokhon ami disabled korbo .. kokhon ami enable korbo
                                 disabled={
+                                    /**
+                                     * mane hocche conversation ekhono initial obosthay ase .. tokhon ami button e press korte dibo
+                                     * na .. hoy conversation jokhon blank array thakbe ba array of object thakbe .. tokhon e ami
+                                     * button press korte dibo
+                                     */
                                     conversation === undefined ||
                                     (participant?.length > 0 &&
                                         participant[0].email === myEmail)
@@ -257,6 +324,7 @@ export default function Modal({ open, control }) {
                             participant[0].email === myEmail && (
                                 <Error message="You can not send message to yourself!" />
                             )}
+                        {/* responseError thakle shetao dekhabe  */}
                         {responseError && <Error message={responseError} />}
                     </form>
                 </div>
