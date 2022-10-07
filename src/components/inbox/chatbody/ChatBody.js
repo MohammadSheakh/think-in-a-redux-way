@@ -36,7 +36,7 @@ export default function ChatBody() {
             <>
                 <ChatHead message={messages[0]} />
 
-                {/* amar jehetu email ta dorkar .. ami jekono ekta message pathiye dibo  */}
+                {/* amar jehetu dui jon er email ta dorkar .. ami jekono ekta message pathiye dibo  */}
                 <Messages messages={messages} />
                 <Options info={messages[0]} />
             </>
