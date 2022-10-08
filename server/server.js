@@ -1,13 +1,22 @@
+// json server er server creation process ta bad diye amra express er server creation process e gelam ..
+// ekhon amra socket.io implement korar jonno ready
 const auth = require("json-server-auth"); //🔥 npm i // auth ta lagbe .. // eta ekta middleware er moto
 const jsonServer = require("json-server");
-const express = require("express");
+const express = require("express"); // npm i express socket.io
+// uninstall korte chaile .. npm uninstall express socket.io
 const http = require("http");
 
-const app = express();
-const server = http.createServer(app);
-const io = require("socket.io")(server);
+const app = express(); // app ta banalam
+// const server = jsonServer.create(); // eta use kore amra amader server baniyechilam
+// but eta tar moto kore she baniyeche ..but socket ke kaj korate hole .. ekta http server hote hobe .. er jonno amader ke
+// node js er http module ke use korte hobe .. amra express js ekhane use korbo ..
+const server = http.createServer(app); // create server korar time e amader ke ekta app reference dite hoy
+const io = require("socket.io")(server); // socket er duita kaj... shob kichu send kora and listen kora
 
-global.io = io;
+// io .on diye listen korte pare ..
+//
+
+global.io = io; // 😀 browser e jerokom window thake .. node js e hocche global // shob jaygay jeno io ke access korte pari ..
 
 const router = jsonServer.router("db.json");
 
@@ -33,8 +42,9 @@ const middlewares = jsonServer.defaults();
 const port = process.env.PORT || 9000;
 
 // Bind the router db to the app
+// server.db = router.db;
 app.db = router.db;
-
+// server.use(middlewares);
 app.use(middlewares);
 
 const rules = auth.rewriter({
@@ -50,8 +60,12 @@ const rules = auth.rewriter({
     messages: 660,
 });
 
+// server.use(rules);
+// server.use(auth);
+// server.use(router);
+
 app.use(rules); // prottek ta route ei rules er moddhe diye ghure ashse ..
-app.use(auth);
+app.use(auth); // whole server na .. oi app use korbe ..
 app.use(router);
 
 server.listen(port);
@@ -60,4 +74,13 @@ server.listen(port);
 
 /**
  * amader API ready ase .. amra ekhon redux toolkit er maddhome request kore kore data dekhabo and
+ */
+
+/**
+ * amra amader server e socket ta setup korbo
+ * amra JSON server use korchi .. er onek limitation ase ..
+ * jei vabe amra JSON server er setup korechi .. ei vabe set up rakhle .. socket niye kaj kora jabe na ..
+ * so she jonnno eta ke express server e ,, ekta standard http server e convert korte hobe ..  and amader server e
+ * server.js nam e ekta file ase ..
+ * ei khan e amra jeta korechi
  */
