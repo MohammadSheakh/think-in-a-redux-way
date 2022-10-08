@@ -194,19 +194,73 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 body: data,
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                // optimistic cache update start
-                const pathResult = dispatch(
+                // client side optimistic cache update start // jokhon query shuru hocche tokhon e korbo
+                // query shuru hoyeche .. ekhono kintu fulfilled hoy nai .. ami chaile queryFulfilled er poreo kaj ta korte pari
+                // sheta ar optimistic hobe na .. sheta hobe pessimistic .. optimistic mane .. ami agei local cash ta update korbo ..
+                // ekhon client side cash update korte chaile .. amar ekta😀utility function lagbe .. naile cash ta ami update korbo
+                // kivabe ..cash er control ta ami pabo kivabe .. shetar jonno she ekta utility function diye diyeche .. sheta amra
+                // use korbo .. apiSlice.util.updateQueryData() ei nam e tar ekta function ase .. ei function ta call korle .. ei
+                // function er maddhome client side cash ta amra update korte parbo .. Client Side e onek gula route er e cash ase ..
+                // jemon Conversation list er jonno corresponding cash .. sheta ase .. abar messages pathate .. messages list dekhanor
+                // jonno jei cash ta .. shetar ekta data .. mane cash ase .. so, oi kon cash ta ami update korbo, sheta ami bujhbo ki
+                // kore .. sheta bojhar jonno amake she option diye diyeche .. first parameter e ami bolbo .. amar kon API ta ami
+                // update korbo .. to ami jokhon ei kaj ta korbo .. tokhon ami ashole kaj korte chacchi ki ..ami Conversation list
+                // er cash ta update korte chacchi .. ei cash er corresponding endpoint konta ? getConversations endpoint..
+                // tahole ami first parameter e sheta bole dibo ..and 2nd parameter e .. getConversations kintu onek vabe hote pare ..
+                // jemon bivinno argument ase .. different different argument er jonno kintu different different cash ..
+                // email jodi parameter hishebe ashe .. shetai to amra arg e pacchi ..so, prottek ta email er jonno alada cash thakbe
+                // so, oi cash ta ke identify korar jonno shudhu kintu .. "getConversations", ei tuku kintu enough na .. er argument
+                // tao ashole amar lagbe ..getConversations endpoint function er argument hocche email .. ekhon ei endpoint function
+                // mane editConversation() endpoint function er moddhe email ta ami pabo kivabe ? eta ekhane amar arg.sender er moddhe
+                // ase .. logged in user er email ta .. 3rd parameter e she actually amake ekta callback function dey .. shei callback
+                // function er moddhe amra draft state ta pai .. draft mane ki .. amra EMER use korechilam .. apnader mone ase ..
+                // shei draft ta ke kintu amra manually muted korte pari .. she jehetu in the back-end EMER use kore .. ejonno she
+                // amake draft state dibe .. ei draft ta hocche amar actually getConversations() bam pasher jei API ta ase .. endpoint
+                // ta ase .. shei endpoint er .. jehetu ami sumit diye login kore achi .. ei khetre sumit .. tar mane ..
+                // getConversations() e sumit diye jei cash tar.. corresponding jinish ta amra ekhon draft e peye giyechi ..
+                // etar structure ta amra jani hocche array of conversations arki .. amra jehetu ekhon draft er moddhe array of conversations
+                // ta peye giyechi .. so , shei draft ta ke amar ekhon change korte hobe .. amar kaj hocche , ekhon jehetu eita edit ..
+                // tar mane sure .. conversation ta left side e ase .. tar mane amake oi conversation id khuje ber kore .. oitar corresponding
+                // last message and timestamp ta update kore dite hobe .. draft ta ke amra muted kore dibo .. taholei kaj hoye jabe ..
+                // sheta korar jonno age .. oi conversation id ta amake khuje ber korte hobe .. query: ({ id, data, sender }) conversation
+                // id kintu amar kase ase .. ei ta hocche jei conversation ta edit korsi .. shetar id .. amake taile draft theke oi id ta
+                // khuje ber korte hobe .. tahole cholun oi corresponding conversation ta khuje ber kori ..
+                const patchResult = dispatch(
                     apiSlice.util.updateQueryData(
-                        "getConversations",
-                        arg.sender,
+                        "getConversations", // kontar cash invalid korte chacchi ... shetar API bole dibo
+                        arg.sender, // already string .. tai problem hoy ni ..
                         (draft) => {
+                            // ei conversation ta ke amar edit korte hobe .. draft er moddhe je array of conversaion ase .. shetar moddhe
+                            // jetar id ashole arg.id .. sheta
+                            //😀addConversation er khetre ei kaj ta korte hobe..shekhetre id to nai..so, draft er moddhe data push korte hobe
                             const draftConversation = draft.data.find(
                                 (c) => c.id == arg.id
+                                /**
+                                 * ekhane ekta bepar ase .. amra jei draft state ta pai .. ei ta kintu she string akare save kore
+                                 * rakhe .. eta kintu amar browser er cash er moddhe ase .. shekhan e shob kichu kintu string ..
+                                 * shekhan e kintu object nai .. apnake she draft diye dicche javascript er proxy akare ..
+                                 * draft tar moddhe shob kichu local storage e jevabe thake .. local storage e amra stringify kore
+                                 * nei na ? draft eo oi vabe thake .. ekdom text akare .. so oi khan e kono number jodi thake ..
+                                 * sheta kintu string hoye thake .. so ejonno 😀 c.id je likhsi .. eta number na .. eta string ..
+                                 * arg.id kintu number .. karon ei parameter theke esheche .. ejonno ami === diye check korbo na
+                                 * ami == diye check korbo
+                                 */
                             );
-                            draftConversation.message = arg.data.message;
+                            draftConversation.message = arg.data.message; // last message ta update kore dilam left side e conversation er moddhe
                             draftConversation.timestamp = arg.data.timestamp;
                         }
                     )
+                    /**
+                     * ei jaygay amar ekta optimistic update holo .. mane .. server theke kintu response confirm kore ni .. je
+                     * asholei update korte pereche kina server e.. but ami client side e kintu update kore felechi .. ekhon ekta
+                     * kaj .. jehetu eita optimistic update ... ekhon jodi server side e failed hoy ! ? tahole to apnake shei case
+                     * tao handle korte hobe .. tahole apnake revert korte hobe .. sheta apni kivabe korben .. sheita amra jeta
+                     * korbo ..ei je amra updateQueryData() jeta pelam.. but ei jinish ta kintu eivabe call kore dile hobe na ..
+                     * eita amake ekta dispatch er moddhe call korte hobe .. etao ekta action creator ba action thunk er moto
+                     * eta thunk na ashole .. eta action creator arki.. dispatch er moddhe call korle .. jokhon she dispatch kore
+                     * felbe .. tar pore .. eta action creator .. thunk na .. jar karone eita asynchronous na .. ei kaj tar porei
+                     * ami jinish ta ke dhore fellam .. eitar nam dilam ..patchResult ..
+                     */
                 );
                 // optimistic cache update end
 
@@ -222,8 +276,23 @@ export const conversationsApi = apiSlice.injectEndpoints({
                         const receiverUser = users.find(
                             (user) => user.email !== arg.sender
                         );
-
+                        /**
+                         * Pessimistic Cache Update Related Information
+                         * ekhane amra request korechilam and finally dispatch er moddhe message update ta amra kore chilam ..
+                         * eta amra silent update korechilam , karon etar response amader dorkar chilo na ..amra just .. conversation
+                         * jokhon  edit hocchilo ..silently message update kore dicchilam .. kintu ekhon amra chacchi je na ..
+                         * amra message ta successfully update hole, tarpore ami ashole message er corresponding cash ta ami update
+                         * kore dibo .. ager bar er moto ami optimistic korbo na .. amra ebar arekta process dekhbo .. sheta hocche
+                         * pissimistic .. sheta hocche .. ei je dispatch ta amra korechi .. sheta silent chilo .. eta amra await
+                         * kori nai .. amra eta ke asynchronously rekhe diyechi .. hoye jabe automatic .. kintu ekhon jehetu amar
+                         * result ta dorkar hobe .. jehetu successfully hole .. taholei ami ashole update ta korbo .. shehetu tahole
+                         * ashole amake await korte hobe .. ekhon dispatch amra jani eta by default promise return kore na ..
+                         * so , eta ke 😀 promisify korar jonno eta ke .unwrap() method call kore dite hobe .. so , etar response ta ke ami
+                         * res er moddhe dhorchi .. tahole message ta send houar pore jokhon response chole ashbe .. sheta ami res er
+                         * moddhe pabo ..
+                         */
                         const res = await dispatch(
+                            // await na korle promise dibe    // tai await korte hobe
                             messagesApi.endpoints.addMessage.initiate({
                                 conversationId: conversation?.data?.id,
                                 sender: senderUser,
@@ -234,19 +303,35 @@ export const conversationsApi = apiSlice.injectEndpoints({
                         ).unwrap();
 
                         // update messages cache pessimistically start
+                        // er age amra patch result ta ke save kore chilam .. ebar ar amar dorkar nai .. karon hocche oi jaygay ami
+                        // patchResult er moddhe ei jonno rekhechilam .. jeno ami next e server e update na hole ami undo korte pari ..
+                        // kintu ekhon amar ar undo korar proyojon nai..karon response ashar pore eta korchi so, definately eta update hobe
                         dispatch(
                             apiSlice.util.updateQueryData(
-                                "getMessages",
-                                res.conversationId.toString(),
+                                "getMessages", // ekhon amake kon ta ke invalidate korte hobe getMessage Api ta ke
+                                // amra dekhechi je argument hishebe lage hocche individual id .. taholei etar individual cash ta amra
+                                // chinte parbo ..
+                                res.conversationId.toString(), // response er moddheo kintu amar id ta ase .. jehetu string hishebe
+                                // deowa lage localstorage e dicchi .. tai toString() call kore dicchi // rtk query er cash update ba
+                                // edhoroner kono kichu korar shomoy number ba edhoroner kichu deowa jabe na .. only string hote hobe shob kichu
+                                // string na hole she cash chinte parbe na ..
                                 (draft) => {
-                                    draft.push(res);
+                                    draft.push(res); // amar kintu message ekta kore entry hobe .. new ekta kore message object ashse ..
+                                    // amar kaj hocche ei cash e .. just sheta ke push kore deowa ..
                                 }
                             )
                         );
                         // update messages cache pessimistically end
                     }
+                    // if er moddher kaj gula kintu queryFulfilled houar pore hocche .. ei jaygay kintu amra ekta asynchronous
+                    // kaj korechi amra .. async kaj kintu amader uchit try catch diye wrap kore deowa .. karon fail korle na hoy
+                    // dhorte parbo na .. amra jani async await er khetre amra try catch use kori
                 } catch (err) {
-                    pathResult.undo();
+                    // jodi fail hoy ... mane server e jodi edit na korte pare .. taile local state er jei change ta korse ..
+                    // jei  optimistic cache update korse .. sheta undo kore dibe .. mane abar previous state e chole jabe
+                    // mane jei conversation ami optimistic update korechilam .. sheta abar ager jaygay chole jabe ..undo hoye jabe
+                    // karon amra jani redux predictable .. jekono jayga theke undo, redo .. egula kora jay
+                    patchResult.undo();
                 }
             },
         }),
