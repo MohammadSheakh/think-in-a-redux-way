@@ -13,15 +13,32 @@ const app = express(); // app ta banalam
 const server = http.createServer(app); // create server korar time e amader ke ekta app reference dite hoy
 const io = require("socket.io")(server); // socket er duita kaj... shob kichu send kora and listen kora
 
-// io .on diye listen korte pare ..
-//
+// io .on diye event listen korte pare ..
+// io.emit server e event emit korte chaile ..
 
 global.io = io; // 😀 browser e jerokom window thake .. node js e hocche global // shob jaygay jeno io ke access korte pari ..
 
 const router = jsonServer.router("db.json");
+/**
+ * Discord ....................................................................................................................
+ * mane request er moddhe boshe amra request ta shesh houar age , response deowar age .. amra kichu kaj karbar korte pari .. abar
+ * ek e vabe response middleware o kintu ase .. response jokhon finally server dey ... shei response ta deowar shomoy o finally
+ * ekta middleware er moddhe diye ghuriye niye ashte pari amra ..  and shei khan e boshe amra dekhte pari .. ki response dite
+ * jacche ... and shei request er property gula ki .. shekhan theke jodi amra some how check kore nite partam
+ * je .. jodi amar request er URL ta "/conversations" mane jeta EDIT AND ADD ..  and method ta kodi POST and PATCH hoy ... tahole
+ * kintu amra bujhte partam je... conversation edit hoyeche .. arki ..
+ * so amra ashole response er moddhe amra intercept korbo ..
+ * kivabe ?
+ * shetar jonno response likhe json-server er github e search dile .. custom output example nam e ekta concept dekha jabe .. final
+ * jei response ta jacche .. sheta ke modify korte chaile .. ami tomake router.render function diye dicchi .. tumi er moddhe kaj ta
+ * kore felte paro .. tar mane shobar shesh e .. amader server diye jokhon kono kichu jabe .. tokhon final jei response ta ..
+ * sheta (req, res) er moddhe diye dey ..
+ */
 
 // response middleware
 router.render = (req, res) => {
+    // jekono response etar moddhe diye ghure jabe .. tar mane ekhane shob parameter check korte parbo .. amader jeta dorkar
+    // request jeta jacche .. shei request er ..
     const path = req.path;
     const method = req.method;
 
@@ -31,11 +48,11 @@ router.render = (req, res) => {
     ) {
         // emit socket event
         io.emit("conversation", {
-            data: res.locals.data,
+            data: res.locals.data, //ekhane shob data she diye dey..response e jei data she dite jacche..shei data she diye dey
         });
     }
 
-    res.json(res.locals.data);
+    res.json(res.locals.data); // ami body er moddhe na pathiye .. direct pathiye dilam ..
 };
 
 const middlewares = jsonServer.defaults();
