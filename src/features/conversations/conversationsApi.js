@@ -144,7 +144,8 @@ export const conversationsApi = apiSlice.injectEndpoints({
                                             ...draft.data, // ager data er shathe 
                                             ...conversations.data, // new data append kore dilam .. 
                                         ], // array of object er moddhe concatinate kore dicchi .. 
-                                        totalCount: Number(draft.totalCount),
+                                        totalCount: Number(draft.totalCount), // draft theke niye kaj kortesi
+                                        // tai number kore dite hobe .. karon string chilo 
                                     };
                                 }
                             )

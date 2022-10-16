@@ -39,18 +39,25 @@ export default function ChatItems() {
     const fetchMore = () => {
         // existing data ke update kora .. 
         setPage((prevPage) => prevPage + 1); // state er page  number 1 barabe ... 
+        // page update kore dicche .. 
     };
 
     useEffect(() => {
+        // jodi kokhono page number 1 er beshi hoy .. taile amra getMoreConversations action
+        // ta dispatch korbo .. 
         if (page > 1) {
+            // jokhon asholei amar data load kora dorkar .. getMoreConversations request ta pathate 
+            // hobe .. eta amra kivabe patha te pari .. manual dispatch format e patha te pari .. 
+            // Async thunk jevabe dispatch korte hoy .. 
             dispatch(
                 conversationsApi.endpoints.getMoreConversations.initiate({
-                    email,
+                    // manual request pathanor format ta .. 
+                    email,// log in user er email
                     page,
                 })
             );
         }
-    }, [page, email, dispatch]);
+    }, [page, email, dispatch]); // page er change ta amra track korbo .. 
 
     useEffect(() => {
         /**has more jinish ta bojhar jonno amra dekhechi .. response header er moddhe jinish ta 
@@ -66,15 +73,19 @@ export default function ChatItems() {
          */
         if (totalCount > 0) {
             // totalCount er value jokhon 0 er theke beshi hobe .. tokhon e ami ashole hasMore er calculation ta korbo .. 
-            const more = /⏳⏳⏳ 27:00
-                Math.ceil(
+            const more =  // koyta page hobe .. sheta .. 
+                Math.ceil( // fraction hote pare .. tai Math.ceil kore nilam .. 
                     totalCount /
                         Number(process.env.REACT_APP_CONVERSATIONS_PER_PAGE)
-                ) > page;
+                        // jehetu env file theke ashse .. tai amake number e convert kore nite hobe 
+                        // karon string hishebe pabe .. 
+                ) > page; // ei number ta current page er theke beshi holei to has More 
 
-            setHasMore(more);
+            setHasMore(more); // taholei amake notun data ante hobe .. 
+            // has more true na false .. eta kintu prothom bar ei total count ashar porei calculated 
+            // jokhon page change korben .. tokhon kintu has more er state tao change hobe .. 
         }
-    }, [totalCount, page]);
+    }, [totalCount, page]); // page change hoileo .. ei effect ta run korbe .. 
 
     // decide what to render // karon shuru tei to amader data available hoy na ..
     let content = null;
