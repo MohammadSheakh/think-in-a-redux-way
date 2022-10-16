@@ -32,11 +32,46 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 // beshi ante chacchi na .. "github.com/typicode/json-server" ei link theke porte hobe
                 // _page=1&_limit= koto number page ami chai.. and per page e koyta kore chai .. sheta ami bole dite pari
                 `/conversations?participants_like=${email}&_sort=timestamp&_order=desc&_page=1&_limit=${process.env.REACT_APP_CONVERSATIONS_PER_PAGE}`,
-            transformResponse(apiResponse, meta) {
+            /**😅😅 Infinity Scroll er jonno response er header ta ke amar modify korte 
+                     * hobe .. ami response ta ke modify kore ..
+                     * prothom .. 5 tar moddhei kintu she amake total count diye dey .. so, shekhan
+                     * theke amake read kore nilei hobe .. getConversations er jei response dey 
+                     * response ta ke modify korte hobe ..she amake data ta diye dey
+                     *   she ekta array of object dey
+                     * 
+                     * ami transformResponse() nam e ekta function nite pari .. 
+                     */
+                transformResponse(apiResponse, meta) {
+                    /**ei function er moddhe ami response ta ke transform korte parobo .. 
+                     * tar mane definately she amake ekhane response ta diye dibe ... jei response
+                     * ta she pathabe .. sheta ami apiResponse er moddhe peye jai .. ar Request er
+                     * meta value gula .. mane request er header and onnano jinish pati .. shegula o 
+                     * ei meta er moddhe thake .. 
+                     */
+                // ami koyta kore data anchi .. sheta jani .. ami jodi 5 ta kore data ani .. taile response er headers er 
+                // moddhe jei X-Total-Count ase .. sheta ke ami 5 diye vag korbo .. shetar floor result hobe .. koyta 
+                // page minimum ... jokhon e page number 4 hoye jabe .. tokhon amra ar infinite scrool korbo na .. eta
+                // hocche amar so far plan .. 
+                // amra first page anlam .. er pore jokhon new page anbo .. ager ene fela page gula kintu re-validate korchi
+                // na amra .. amra kintu ebar performance onujayi kaj korchi .. last 5 ta chole esheche .. er pore tar thik 
+                // ager 5 ta chole ashbe .. sorted hoye ..  porer chunk e tar ager 5 ta ashbe .. jegula jegula ashse .. amra 
+                // jeta korbo .. full list ta invalid na kore .. again .. already theke jaowa jei cash .. shei cash er moddhe
+                // amra push kore dibo .. amar ja ase .. tar shathe ami concatinate kore dibo  
+                // new page er data anar jonno same API duibar call korle .. ager cash remove hoye / replace hoye new data 
+                // chole ashbe .. append kintu hobe na .. append kivabe kora jete pare .. amader ager cash ta ke dhore rakhte
+                // hobe .. tar shathe new API call er cash .. append kore dite hobe .. 
                 const totalCount = meta.response.headers.get("X-Total-Count");
+                // return apiResponse; // ekhon ami modify kore dibo response ta .. // apiResponse ta chilo 
+                // array of object ta ... 
                 return {
+                    // nijer moto ekta notun object dibo .. tar data er moddhe array of object ta vore dibo .. 
                     data: apiResponse,
-                    totalCount,
+                    totalCount, // first time ei kintu ami total count ta peye jacchi .. 
+                    /**
+                     * ei change er karon e amar ekhon onek jaygay change hobe .. age ami ChatItems Component er
+                     * moddhe data ta petam .. shetai conversations chilo .. ekhon kintu eta ekta array of object
+                     * na .. eta ekhon shora shori ekta object .. tar data er moddhe jinish ta ase .. 
+                     */
                 };
             },
             async onCacheEntryAdded(
@@ -76,24 +111,39 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 socket.close();
             },
         }),
+        // new page er data anar jonno amra new API banacchi 
         getMoreConversations: builder.query({
+            // get more conversations hocche "getConversations" er assistant shudhu more data anar jonno  .. 
+            // ami UI te dekhacchi kintu  "getConversations" er cash .. 
             query: ({ email, page }) =>
+            // koto number page er jonno data anbo .. shetao amra input hishebe nicchi .. 
                 `/conversations?participants_like=${email}&_sort=timestamp&_order=desc&_page=${page}&_limit=${process.env.REACT_APP_CONVERSATIONS_PER_PAGE}`,
-            async onQueryStarted({ email }, { queryFulfilled, dispatch }) {
+            // 😀😀 ekhane onCacheEntryAdded async function ta lagbe na .. jokhon amar data chole ashbe .. tokhon amar 
+            // "getConversations" er cash update korte hobe .. 
+                async onQueryStarted({ email }, { queryFulfilled, dispatch }) {
+                    // 😀 optimistic cash update ekhane kora lagbe na ..  // arg er moddhe amra email ar page ta pai .. destructure kore ber kore nilam .. 
                 try {
-                    const conversations = await queryFulfilled;
-                    if (conversations?.data?.length > 0) {
+                    const conversations = await queryFulfilled; // new conversations paowar pore .. ami draft e concatinate kore dibo .. 
+                    if (conversations?.data?.length > 0) { // new jei chunk ta .. shekhan e aro 5 ta thakbe .. 
+                        // 😅 amar data ashar pore kaj kora lagbe .. so, pissimistically kora lagbe .. 
                         // update conversation cache pessimistically start
+                        // 😀 ami message table e silent entry diyechilam.. sheta amar dorkar nai ... 
                         dispatch(
                             apiSlice.util.updateQueryData(
+                                // jokhon e data pabo .. tokhon "getConversations" API er cash update kore felbo .. 
                                 "getConversations",
-                                email,
-                                (draft) => {
+                                email, // getConversations er cash ta email diye identify hobe .. 
+                                (draft) => { // ei draft er moddhe first page er chunk ta diye dibe .. 
+                                    // draft.push(res);  // 😀 draft er moddhe push na ei khetre .. 
+                                    // ami new ekta array of object .. amake kintu draft er shathe concatinate korte hobe
+                                    // amake ekta new array return korte hobe .. sekhan e ami draft e ja chilo .. sheta 
+                                    // to ami diboi .. tar shathe shathe conversations er data tao spread kore dibo 
+                                    /** 😅 draft ta ke print korte hole amake stringify kore nite hobe ..  */
                                     return {
                                         data: [
-                                            ...draft.data,
-                                            ...conversations.data,
-                                        ],
+                                            ...draft.data, // ager data er shathe 
+                                            ...conversations.data, // new data append kore dilam .. 
+                                        ], // array of object er moddhe concatinate kore dicchi .. 
                                         totalCount: Number(draft.totalCount),
                                     };
                                 }
@@ -101,7 +151,10 @@ export const conversationsApi = apiSlice.injectEndpoints({
                         );
                         // update messages cache pessimistically end
                     }
-                } catch (err) {}
+                } catch (err) {
+                    // undo() korar kichu nai .. karon ami pissimistically korchi .. 
+                    // response na ashle .. hobei na ashole .. 
+                }
             },
         }),
         // 1. ekhon ami conversation API te chole jai .. amar prothom kaj hocche , amake ekta single conversation
@@ -230,6 +283,9 @@ export const conversationsApi = apiSlice.injectEndpoints({
                         "getConversations", // kontar cash invalid korte chacchi ... shetar API bole dibo
                         arg.sender, // already string .. tai problem hoy ni ..
                         (draft) => {
+                            /** infinity scroll -> ekhon kintu amar ar draft er moddhe jinish ta nai .. draft er moddhe data er moddhe data 
+                             * er moddhe jinish ta ase .. tai draft.data.find er moddhe change korte hobe .. 
+                            */
                             // ei conversation ta ke amar edit korte hobe .. draft er moddhe je array of conversaion ase .. shetar moddhe
                             // jetar id ashole arg.id .. sheta
                             //😀addConversation er khetre ei kaj ta korte hobe..shekhetre id to nai..so, draft er moddhe data push korte hobe

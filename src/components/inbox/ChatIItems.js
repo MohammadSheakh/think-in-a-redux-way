@@ -26,13 +26,19 @@ export default function ChatItems() {
     const { data, isLoading, isError, error } =
         useGetConversationsQuery(email) || {}; // query er jonno proyojonio argument amar deowa shesh ..
 
-    const { data: conversations, totalCount } = data || {};
-    const [page, setPage] = useState(1);
+    const { data: conversations, totalCount } = data || {}; // blank object diye dilam .. jeno vul na hoy 
+    // data nam er ekta jinish thakbe .. tar nam conversations diye alias kore nilam .. 
+    /**
+     * totalCount kintu ami ekhon peye giyechi .. tar mane ami ekhon page calculate korte parbo .. and tar upor decide 
+     * kore .. hasMore er bepar ta manage korte parbo .. 
+     */
+    const [page, setPage] = useState(1); // initially 1 number page theke shuru kore chilam .. 
     const [hasMore, setHasMore] = useState(true);
     const dispatch = useDispatch();
 
     const fetchMore = () => {
-        setPage((prevPage) => prevPage + 1);
+        // existing data ke update kora .. 
+        setPage((prevPage) => prevPage + 1); // state er page  number 1 barabe ... 
     };
 
     useEffect(() => {
@@ -47,8 +53,20 @@ export default function ChatItems() {
     }, [page, email, dispatch]);
 
     useEffect(() => {
+        /**has more jinish ta bojhar jonno amra dekhechi .. response header er moddhe jinish ta 
+         * thake .. amar kintu data er moddhe jinish ta nai .. response header ta ami kothay pabo .. 
+         * ami to rtk query diye ekhane data listen korchi .. amar some how .. header theke jinish 
+         * ta niye .. data er moddhe diye dite hobe .. naile ami page e jinish ta pabo na .. 
+         * er jonno API er moddhe kaj korte hobe amar .. amar response ta getConversations API 
+         * theke ashse .. 
+         */
+        /**
+         * rtk query er data jokhon load hoy .. first bar e kintu kichu thakbe na .. amake total count ta ke update 
+         * korte hobe .. 
+         */
         if (totalCount > 0) {
-            const more =
+            // totalCount er value jokhon 0 er theke beshi hobe .. tokhon e ami ashole hasMore er calculation ta korbo .. 
+            const more = /⏳⏳⏳ 27:00
                 Math.ceil(
                     totalCount /
                         Number(process.env.REACT_APP_CONVERSATIONS_PER_PAGE)
@@ -75,12 +93,20 @@ export default function ChatItems() {
     } else if (!isLoading && !isError && conversations?.length > 0) {
         content = (
             <InfiniteScroll
-                dataLength={conversations.length}
-                next={fetchMore}
-                hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
+                // attribute gula copy kore niye ashlam .. documentation theke .. 
+                dataLength={conversations.length} // je koyta data load hoyeche .. already .. 
+                // 5 ta load hoye jaowar pore .. 5 ta hobe .. 15 ta load hoye jaowar pore .. 15 ta hobe .. 
+                next={fetchMore} // jodi nicher dike she scroll kore . taile new data anar jonno ta 
+                // ke .. jei function call korte hobe ... 
+                hasMore={hasMore} // true false dibo .. aro data ase kina .. ekta state management 
+                // korbo .. jokhon e amar shob data chole ashbe .. tokhon ami hasMore false kore dibo
+                loader={<h4>Loading...</h4>} // loading ekta component diye dite pari .. 
                 height={window.innerHeight - 129}
-            >
+                /** by default page er hight onujayi she scroll kore .. ami ekta fixed height o bole 
+                 * dite pari .. 
+                 */
+            >  
+                {/* 😀 InfiniteScroll diye wrap kore dilam ..  */}
                 {conversations.map((conversation) => {
                     // protibar ekta kore conversation pabo..
                     const { id, message, timestamp } = conversation; // conversation er vitorer jinish gula destructure kore nilam
